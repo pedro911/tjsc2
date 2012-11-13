@@ -15,13 +15,24 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
-public class Principal_old extends JFrame {
+import com.fean.tjsc.visual.servico.TelaListaServicosPendentes;
+import com.fean.tjsc.visual.usuario.TelaListaUsuario;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.AbstractAction;
+import java.awt.event.ActionEvent;
+import javax.swing.Action;
+
+public class TelaPrincipal extends JFrame {
 
 	private JPanel contentPane;
 	public static boolean adm;
 	public static String usuario;
-	private JTextField txtUsuario;
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -29,7 +40,7 @@ public class Principal_old extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Principal_old frame = new Principal_old();
+					TelaPrincipal frame = new TelaPrincipal();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,7 +58,8 @@ public class Principal_old extends JFrame {
 	/**
 	 * 
 	 */
-	public Principal_old() {
+	public TelaPrincipal() {
+		setTitle("Controle de Servi\u00E7os dos Ve\u00EDculos do TJSC v2.0");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 750, 500);
 		
@@ -83,21 +95,40 @@ public class Principal_old extends JFrame {
 		
 		JMenu mnMotorista = new JMenu("Motorista");
 		menuBar.add(mnMotorista);
-		contentPane = new JPanel();
+		
+		JMenu mnUsuarios = new JMenu("Usu\u00E1rios");
+		menuBar.add(mnUsuarios);
+		
+		JMenuItem mntmListar = new JMenuItem("Listar");
+		mntmListar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {				
+				trocaTela(new TelaListaServicosPendentes());
+			}
+		});
+		mnUsuarios.add(mntmListar);
+		
+		JMenuItem mntmCadastrar = new JMenuItem("Cadastrar");
+		mnUsuarios.add(mntmCadastrar);
+		
+		JMenuItem mntmEditar = new JMenuItem("Editar");
+		mnUsuarios.add(mntmEditar);
+		
+		JMenuItem mntmRemover = new JMenuItem("Remover");
+		mnUsuarios.add(mntmRemover);
+		//contentPane = new JPanel();
+		
+		trocaTela(new TelaListaUsuario());
+		//contentPane = new TelaListaServicosPendentes();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JLabel lblUsurioLogado = new JLabel("Usu\u00E1rio logado:");
-		lblUsurioLogado.setBounds(538, 413, 101, 14);
-		contentPane.add(lblUsurioLogado);
-		
-		txtUsuario = new JTextField();
-		txtUsuario.setEditable(false);
-		txtUsuario.setText(usuario);
-		txtUsuario.setBounds(643, 410, 86, 20);
-		contentPane.add(txtUsuario);
-		txtUsuario.setColumns(10);
+		//contentPane.setMaximumSize(getContentPane().getMaximumSize());
+		//setContentPane(contentPane);
+		//contentPane.setLayout(null);
 		setLocationRelativeTo(null);
+	}
+	
+	public void trocaTela(JPanel panel){
+		contentPane = panel;
+		setContentPane(panel);		
 	}
 }

@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 
-import TestesVisual.Principal_old;
+import TestesVisual.TelaPrincipal;
 
 import com.fean.tjsc.mb.marca.MarcaMB;
 import com.fean.tjsc.mb.usuario.UsuarioMB;
@@ -94,10 +94,10 @@ public class Login extends JFrame {
 					JOptionPane.showMessageDialog(null, "Logado");
 					boolean adm = usuarioMB.verificaUsuarioAdministrador(txtUsuario.getText());
 					JOptionPane.showMessageDialog(null, "é adm: " + adm);
-					Principal_old.adm = adm;
-					Principal_old.usuario = txtUsuario.getText();
+					TelaPrincipal.adm = adm;
+					TelaPrincipal.usuario = txtUsuario.getText();
 					//aqui abrir tela principal
-					Principal_old p1 = new Principal_old();
+					TelaPrincipal p1 = new TelaPrincipal();
 					setVisible(false);
 					p1.setVisible(true);
 				}
