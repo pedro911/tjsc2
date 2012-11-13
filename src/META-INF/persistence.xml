@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+    http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
+    
+	<persistence-unit name="tjscPU"
+		transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+ 		<class>com.fean.tjsc.dao.tiposervico.TipoServicoVeiculo</class> 
+		<class>com.fean.tjsc.dao.modelo.Modelo</class>
+		<class>com.fean.tjsc.dao.tiposervico.TipoServico</class>
+		<class>com.fean.tjsc.dao.usuario.Usuario</class>
+		<class>com.fean.tjsc.dao.motorista.Motorista</class>
+		<class>com.fean.tjsc.dao.veiculo.Veiculo</class>
+		<class>com.fean.tjsc.dao.marca.Marca</class>
+		<class>com.fean.tjsc.dao.unidade.Unidade</class>
+		<class>com.fean.tjsc.dao.tiposervico.TipoServicoModelo</class>
+		<class>com.fean.tjsc.dao.abastecimento.Abastecimento</class>
+		<class>com.fean.tjsc.dao.fornecedor.Fornecedor</class>
+		<class>com.fean.tjsc.dao.servico.Servico</class>
+		<class>com.fean.tjsc.dao.tiposervico.TipoServicoModeloId</class>
+		<class>com.fean.tjsc.dao.tiposervico.TipoServicoVeiculoId</class>
+		<properties>
+			<property name="hibernate.connection.driver_class"
+				value="com.mysql.jdbc.Driver" />
+			<property name="hibernate.connection.url"
+				value="jdbc:mysql://150.162.78.21:3306/tjsc" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+			<property name="hibernate.connection.username" value="root" />
+			<property name="hibernate.connection.password" value="root" />
+		</properties>
+	</persistence-unit>
+
+</persistence>
