@@ -1,5 +1,8 @@
 package com.fean.tjsc.visual.servico;
 
+import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.GroupLayout;
@@ -7,6 +10,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
@@ -68,11 +72,37 @@ public class TelaListaServicosPendentes extends JPanel {
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
+				{"teste1", "troca oleo", "01/11/2012"},
+				{"teste2", "troca oleo", "14/11/2012"},
+				{"teste3", "troca pastilha freio", "25/11/2012"},
 			},
 			new String[] {
 				"Ve\u00EDculo", "Servi\u00E7o a fazer", "Data programada"
 			}
 		));
+		
+		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {  
+            public Component getTableCellRendererComponent(JTable table, Object value,  
+                    boolean isSelected, boolean hasFocus, int row, int column) {  
+                super.getTableCellRendererComponent(table, value, isSelected,  
+                        hasFocus, row, column);  
+                if (row == 0) {  
+                    setBackground(Color.RED);
+                    setForeground(Color.WHITE);
+                } 
+                else if (row == 1) {  
+                    setBackground(Color.YELLOW);
+                    setForeground(Color.BLACK);
+                } 
+                else {  
+                    setBackground(null);
+                    setForeground(null);
+                }  
+                return this;  
+            }  
+        });
+		
+		table.getColumnModel().getColumn(1).setPreferredWidth(87);
 		scrollPane.setViewportView(table);
 		setLayout(groupLayout);
 

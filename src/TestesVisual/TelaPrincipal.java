@@ -26,12 +26,15 @@ import java.awt.event.MouseEvent;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
+import java.awt.CardLayout;
 
 public class TelaPrincipal extends JFrame {
 
 	private JPanel contentPane;
 	public static boolean adm;
 	public static String usuario;
+	private final Action action = new SwingAction();
+	private final Action action_1 = new SwingAction_1();
 	
 	/**
 	 * Launch the application.
@@ -69,6 +72,10 @@ public class TelaPrincipal extends JFrame {
 		JMenu mnIncio = new JMenu("In\u00EDcio");
 		menuBar.add(mnIncio);
 		
+		JMenuItem mntmTelaInicial = new JMenuItem("Tela Inicial");
+		mntmTelaInicial.setAction(action_1);
+		mnIncio.add(mntmTelaInicial);
+		
 		JMenuItem mntmAjuda = new JMenuItem("Ajuda");
 		mnIncio.add(mntmAjuda);
 		
@@ -100,12 +107,7 @@ public class TelaPrincipal extends JFrame {
 		menuBar.add(mnUsuarios);
 		
 		JMenuItem mntmListar = new JMenuItem("Listar");
-		mntmListar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {				
-				trocaTela(new TelaListaServicosPendentes());
-			}
-		});
+		mntmListar.setAction(action);
 		mnUsuarios.add(mntmListar);
 		
 		JMenuItem mntmCadastrar = new JMenuItem("Cadastrar");
@@ -116,19 +118,38 @@ public class TelaPrincipal extends JFrame {
 		
 		JMenuItem mntmRemover = new JMenuItem("Remover");
 		mnUsuarios.add(mntmRemover);
-		//contentPane = new JPanel();
+		contentPane = new JPanel();
 		
-		trocaTela(new TelaListaUsuario());
+		trocaTela(new TelaListaServicosPendentes());
 		//contentPane = new TelaListaServicosPendentes();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		//contentPane.setMaximumSize(getContentPane().getMaximumSize());
-		//setContentPane(contentPane);
-		//contentPane.setLayout(null);
+		setContentPane(contentPane);
+		contentPane.setLayout(new CardLayout());
 		setLocationRelativeTo(null);
 	}
 	
 	public void trocaTela(JPanel panel){
-		contentPane = panel;
-		setContentPane(panel);		
+		getContentPane().removeAll();
+		contentPane.add(panel);
+		revalidate();		
+	}
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "Listar");
+			putValue(SHORT_DESCRIPTION, "Listar usuarios");
+		}
+		public void actionPerformed(ActionEvent e) {
+			trocaTela(new TelaListaUsuario());			
+		}
+	}
+	private class SwingAction_1 extends AbstractAction {
+		public SwingAction_1() {
+			putValue(NAME, "Tela Inicial");
+			putValue(SHORT_DESCRIPTION, "Lista serviços pendentes");
+		}
+		public void actionPerformed(ActionEvent e) {
+			trocaTela(new TelaListaServicosPendentes());
+		}
 	}
 }
