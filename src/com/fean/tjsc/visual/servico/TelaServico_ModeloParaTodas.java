@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package TestesVisual;
+package com.fean.tjsc.visual.servico;
 import java.awt.Dimension;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;

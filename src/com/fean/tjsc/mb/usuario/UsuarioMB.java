@@ -24,12 +24,12 @@ public class UsuarioMB {
 
 	}
 
-	public String inserir(Abastecimento abastecimento) {
+	public String inserir(Usuario user) {
 
 		String retorno = "ok";
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
+		UsuarioDAO daoUsuario = UsuarioDAO.getInstance();
 		try {
-			daoAbastecimento.save(abastecimento);
+			daoUsuario.save(user);
 		} catch (Exception e) {
 			retorno = "erro";
 		}

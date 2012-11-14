@@ -16,7 +16,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
 import com.fean.tjsc.visual.servico.TelaListaServicosPendentes;
+import com.fean.tjsc.visual.usuario.TelaCadastroUsuario;
 import com.fean.tjsc.visual.usuario.TelaListaUsuario;
+import com.fean.tjsc.visual.veiculo.TelaCadastroVeiculo;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -35,6 +37,8 @@ public class TelaPrincipal extends JFrame {
 	public static String usuario;
 	private final Action action = new SwingAction();
 	private final Action action_1 = new SwingAction_1();
+	private final Action action_2 = new SwingAction_2();
+	private final Action action_3 = new SwingAction_3();
 	
 	/**
 	 * Launch the application.
@@ -100,6 +104,10 @@ public class TelaPrincipal extends JFrame {
 		JMenu mnVeculos = new JMenu("Ve\u00EDculos");
 		menuBar.add(mnVeculos);
 		
+		JMenuItem mntmListar_1 = new JMenuItem("Listar");
+		mntmListar_1.setAction(action_3);
+		mnVeculos.add(mntmListar_1);
+		
 		JMenu mnMotorista = new JMenu("Motorista");
 		menuBar.add(mnMotorista);
 		
@@ -111,6 +119,7 @@ public class TelaPrincipal extends JFrame {
 		mnUsuarios.add(mntmListar);
 		
 		JMenuItem mntmCadastrar = new JMenuItem("Cadastrar");
+		mntmCadastrar.setAction(action_2);
 		mnUsuarios.add(mntmCadastrar);
 		
 		JMenuItem mntmEditar = new JMenuItem("Editar");
@@ -134,6 +143,7 @@ public class TelaPrincipal extends JFrame {
 		contentPane.add(panel);
 		revalidate();		
 	}
+	
 	private class SwingAction extends AbstractAction {
 		public SwingAction() {
 			putValue(NAME, "Listar");
@@ -150,6 +160,24 @@ public class TelaPrincipal extends JFrame {
 		}
 		public void actionPerformed(ActionEvent e) {
 			trocaTela(new TelaListaServicosPendentes());
+		}
+	}
+	private class SwingAction_2 extends AbstractAction {
+		public SwingAction_2() {
+			putValue(NAME, "Cadastrar");
+			putValue(SHORT_DESCRIPTION, "Cadastrar usuário");
+		}
+		public void actionPerformed(ActionEvent e) {
+			trocaTela(new TelaCadastroUsuario());
+		}
+	}
+	private class SwingAction_3 extends AbstractAction {
+		public SwingAction_3() {
+			putValue(NAME, "Cadastar");
+			putValue(SHORT_DESCRIPTION, "Cadastrar veiculos");
+		}
+		public void actionPerformed(ActionEvent e) {
+			trocaTela(new TelaCadastroVeiculo());
 		}
 	}
 }
