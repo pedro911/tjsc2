@@ -98,6 +98,8 @@ public class TelaCadastroUsuario extends JPanel {
 
 				UsuarioMB usuarioMB = UsuarioMB.getInstance();
 				Usuario user = new Usuario();
+				
+				//essa tah melhor
 
 				if (txtNome.getText().isEmpty() && txtEmail.getText().isEmpty() &&
 						(passwordField.getPassword().length == 0 || passwordField_1.getPassword().length == 0)){
