@@ -36,11 +36,11 @@ public class UsuarioMB {
 		return retorno;
 	}
 
-	public String editar(Abastecimento abastecimento) {
+	public String editar(Usuario user) {
 		String retorno = "ok";
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
+		UsuarioDAO daoUsuario = UsuarioDAO.getInstance();
 		try {
-			daoAbastecimento.update(abastecimento);
+			daoUsuario.update(user);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
@@ -49,18 +49,88 @@ public class UsuarioMB {
 	}
 
 
-	public String apagar(Abastecimento abastecimento) {
+	public String apagar(Usuario user) {
 		String retorno = "ok";
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
+		UsuarioDAO daoUsuario = UsuarioDAO.getInstance();
 		try {
-			daoAbastecimento.delete(abastecimento);
+			daoUsuario.delete(user);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
+
 		return retorno;
 	}
 
-	public boolean validarUsuario(String usuario, String senha) {
+	public String validarUsuario(Usuario user){
+		String retorno = "";
+
+		//para fazer validação de campos
+
+		if (user.getNome().isEmpty()){
+			retorno += "Nome do usuário em branco\n";			
+		}
+
+		else if (user.getEmail().isEmpty()){
+			retorno += "E-mail em branco\n";
+		}
+		
+		else if (user.getMatricula().isEmpty()){
+			retorno += "Digite uma matrícula\n";
+		}
+		
+		else if (user.getSenha().isEmpty()){
+			retorno += "Digite uma senha\n";
+		}
+
+		else if ((user.getEmail().contains("@")) &&
+				(user.getEmail().contains(".")) &&
+				(!user.getEmail().contains(" "))) {
+
+			String usuario = new String(user.getEmail().substring(0,user.getEmail().lastIndexOf('@')));
+
+			String dominio = new String(user.getEmail().substring(user.getEmail().lastIndexOf('@') + 1, user.getEmail().length()));
+
+			if ((usuario.length() >=1) && (!usuario.contains("@")) 
+					&& (dominio.contains(".")) && (!dominio.contains("@")) 
+					&& (dominio.indexOf(".") >=1) 
+					&& (dominio.lastIndexOf(".") < dominio.length() - 1)) {
+				retorno = "ok";
+			} 
+			else {
+				retorno += "E-mail Inválido\n";
+			}
+		} 
+		else {
+			retorno += "E-mail Inválido\n";				
+		}
+		
+		return retorno;
+	}
+	/*
+
+if (txtNome.getText().isEmpty() && txtEmail.getText().isEmpty() &&
+		(passwordField.getPassword().length == 0 || passwordField_1.getPassword().length == 0)){
+	txtNome.setBackground(Color.YELLOW);
+	txtNome.setText("Digite um nome");
+	txtEmail.setBackground(Color.YELLOW);
+	txtEmail.setText("Digite um e-mail");
+	JOptionPane.showMessageDialog(null, "Digite uma senha");
+}
+else if (txtEmail.getText().isEmpty()){
+	txtEmail.setBackground(Color.YELLOW);
+	txtEmail.setText("Digite um e-mail válido para o usuário");					
+}
+else if ( Arrays.equals (passwordField.getPassword(),passwordField_1.getPassword()) == false) {
+	passwordField.setBackground(Color.YELLOW);
+	passwordField_1.setBackground(Color.YELLOW);
+	JOptionPane.showMessageDialog(null, "As senhas digitadas são diferentes, tente novamente");
+}
+
+
+return retorno;
+}
+	 */
+	public boolean validarUsuarioLogin(String usuario, String senha) {
 
 		boolean resultado = false;		
 		Usuario user = new Usuario();
@@ -82,22 +152,37 @@ public class UsuarioMB {
 		}
 		return resultado;		
 	}
-	
+
 	public boolean verificaUsuarioAdministrador(String usuario){
-				
+
 		Usuario user = new Usuario();
 		user.setNome(usuario);		
 		UsuarioDAO usuarioDAO = UsuarioDAO.getInstance();
 		List<Usuario> rs = usuarioDAO.findByNome(usuario);
-		
+
 		boolean resultado = rs.get(0).getAdministrador();			
-		
+
 		return resultado;
+	}
+	
+	public String pegarSenha(Integer id){
+		String senha = "";		
+		Usuario user = new Usuario();
+		user.setIdusuario(id);		
+		UsuarioDAO usuarioDAO = UsuarioDAO.getInstance();
+		user = usuarioDAO.findById(id);		
+		senha = user.getSenha();		
+		return senha;
 	}
 
 	public List<Usuario> finbByAll() throws ClassNotFoundException, SQLException{
 		UsuarioDAO usuarioDAO = UsuarioDAO.getInstance();				
 		return usuarioDAO.findAll();
+	}
+	
+	public List<Usuario> finbByName(String nome) throws ClassNotFoundException, SQLException{
+		UsuarioDAO usuarioDAO = UsuarioDAO.getInstance();				
+		return usuarioDAO.findByNome(nome);
 	}
 
 }

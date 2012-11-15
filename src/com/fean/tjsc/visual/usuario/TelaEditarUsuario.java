@@ -26,18 +26,20 @@ import javax.swing.JFormattedTextField;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-public class TelaCadastroUsuario extends JPanel {
-	private JFormattedTextField txtEmail;
-	private JTextField txtNome;
-	private JTextField txtMatricula;
-	private JPasswordField passwordField;
+public class TelaEditarUsuario extends JPanel {
+	JFormattedTextField txtEmail;
+	JTextField txtNome;
+	JTextField txtMatricula;
+	JPasswordField passwordField;
+	JTextField txtId;
+	JRadioButton rdbtnAdministrador;
 	
 	/**
 	 * Create the panel.
 	 */
-	public TelaCadastroUsuario() {
+	public TelaEditarUsuario() {
 
-		JLabel lblCadastroDeUsurio = new JLabel("Cadastro de Usu\u00E1rio");
+		JLabel lblCadastroDeUsurio = new JLabel("Atualizar Usu\u00E1rio");
 		lblCadastroDeUsurio.setHorizontalAlignment(SwingConstants.CENTER);
 
 		JLabel lblNome = new JLabel("Nome:");
@@ -61,14 +63,18 @@ public class TelaCadastroUsuario extends JPanel {
 		JLabel lblSenha_1 = new JLabel("Senha:");
 		lblSenha_1.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		final JRadioButton rdbtnAdministrador = new JRadioButton("Administrador do sistema");
+		rdbtnAdministrador = new JRadioButton("Administrador do sistema");
 
-		JButton btnCadastrar = new JButton("Cadastrar");
+		JButton btnCadastrar = new JButton("Atualizar");
 		btnCadastrar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 
 				UsuarioMB usuarioMB = UsuarioMB.getInstance();
+				
+				//pegar a senha do usuario carregado na tela
+				
+				passwordField.setText(usuarioMB.pegarSenha(Integer.parseInt(txtId.getText())));
 				
 				Usuario user = new Usuario();				
 
@@ -77,11 +83,12 @@ public class TelaCadastroUsuario extends JPanel {
 				user.setMatricula(txtMatricula.getText());
 				user.setSenha(String.valueOf(passwordField.getPassword()));
 				user.setAdministrador(rdbtnAdministrador.isSelected());
+				user.setIdusuario(Integer.parseInt(txtId.getText()));
 
 				String resultado = usuarioMB.validarUsuario(user);
 
 				if (resultado == "ok"){
-					usuarioMB.inserir(user);
+					usuarioMB.editar(user);
 					JOptionPane.showMessageDialog(null, "Cadastro Efetuado!");
 					txtNome.setText("");
 					txtEmail.setText("");
@@ -110,45 +117,56 @@ public class TelaCadastroUsuario extends JPanel {
 		});
 
 		passwordField = new JPasswordField();
+		
+		txtId = new JTextField();
+		txtId.setEditable(false);
+		txtId.setColumns(10);
 
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(176)
-					.addComponent(lblCadastroDeUsurio, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(176))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(278, Short.MAX_VALUE)
-					.addComponent(btnLimpar)
-					.addGap(18)
-					.addComponent(btnCadastrar)
-					.addContainerGap())
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(lblSenha, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(lblNome, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(lblMatrcula, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(lblSenha_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(txtNome, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-						.addComponent(txtEmail, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-								.addComponent(txtMatricula, GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))
-							.addGap(39)
-							.addComponent(rdbtnAdministrador)))
+							.addGap(176)
+							.addComponent(lblCadastroDeUsurio, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addGap(114)
+							.addComponent(txtId, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap(284, Short.MAX_VALUE)
+							.addComponent(btnLimpar)
+							.addGap(18)
+							.addComponent(btnCadastrar))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(lblSenha, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblNome, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblMatrcula, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblSenha_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGap(18)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(txtNome, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+								.addComponent(txtEmail, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+										.addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+										.addComponent(txtMatricula, GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE))
+									.addGap(39)
+									.addComponent(rdbtnAdministrador)))))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(23)
-					.addComponent(lblCadastroDeUsurio, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-					.addGap(24)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(23)
+							.addComponent(lblCadastroDeUsurio, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(30)
+							.addComponent(txtId, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNome)
 						.addComponent(txtNome, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -169,7 +187,7 @@ public class TelaCadastroUsuario extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnCadastrar)
 						.addComponent(btnLimpar))
-					.addContainerGap(90, Short.MAX_VALUE))
+					.addContainerGap(18, Short.MAX_VALUE))
 		);
 		setLayout(groupLayout);
 

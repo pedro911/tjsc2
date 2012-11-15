@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -33,12 +34,14 @@ import java.awt.CardLayout;
 public class TelaPrincipal extends JFrame {
 
 	private JPanel contentPane;
-	public static boolean adm;
+	public static boolean adm = true;
 	public static String usuario;
 	private final Action action = new SwingAction();
 	private final Action action_1 = new SwingAction_1();
 	private final Action action_2 = new SwingAction_2();
 	private final Action action_3 = new SwingAction_3();
+	private final Action action_4 = new SwingAction_4();
+	private final Action action_5 = new SwingAction_5();
 	
 	/**
 	 * Launch the application.
@@ -123,9 +126,11 @@ public class TelaPrincipal extends JFrame {
 		mnUsuarios.add(mntmCadastrar);
 		
 		JMenuItem mntmEditar = new JMenuItem("Editar");
+		mntmEditar.setAction(action_4);
 		mnUsuarios.add(mntmEditar);
 		
 		JMenuItem mntmRemover = new JMenuItem("Remover");
+		mntmRemover.setAction(action_5);
 		mnUsuarios.add(mntmRemover);
 		contentPane = new JPanel();
 		
@@ -150,7 +155,12 @@ public class TelaPrincipal extends JFrame {
 			putValue(SHORT_DESCRIPTION, "Listar usuarios");
 		}
 		public void actionPerformed(ActionEvent e) {
-			trocaTela(new TelaListaUsuario());			
+			if(adm == true){
+				trocaTela(new TelaListaUsuario());
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Você não tem permissão para acessar este menu");
+			}
 		}
 	}
 	private class SwingAction_1 extends AbstractAction {
@@ -168,7 +178,14 @@ public class TelaPrincipal extends JFrame {
 			putValue(SHORT_DESCRIPTION, "Cadastrar usuário");
 		}
 		public void actionPerformed(ActionEvent e) {
-			trocaTela(new TelaCadastroUsuario());
+			
+			if(adm == true){
+				trocaTela(new TelaCadastroUsuario());
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Você não tem permissão para acessar este menu");
+			}
+			
 		}
 	}
 	private class SwingAction_3 extends AbstractAction {
@@ -178,6 +195,36 @@ public class TelaPrincipal extends JFrame {
 		}
 		public void actionPerformed(ActionEvent e) {
 			trocaTela(new TelaCadastroVeiculo());
+		}
+	}
+	private class SwingAction_4 extends AbstractAction {
+		public SwingAction_4() {
+			putValue(NAME, "Editar");
+			putValue(SHORT_DESCRIPTION, "Editar Usuários");
+		}
+		public void actionPerformed(ActionEvent e) {
+			if(adm == true){
+				trocaTela(new TelaListaUsuario());
+				JOptionPane.showMessageDialog(null, "Selecione um usário abaixo e clique em editar");				
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Você não tem permissão para acessar este menu");
+			}
+		}
+	}
+	private class SwingAction_5 extends AbstractAction {
+		public SwingAction_5() {
+			putValue(NAME, "Remover");
+			putValue(SHORT_DESCRIPTION, "Abre lista de usuários para selecionar e remover");
+		}
+		public void actionPerformed(ActionEvent e) {
+			if(adm == true){
+				trocaTela(new TelaListaUsuario());
+				JOptionPane.showMessageDialog(null, "Selecione um usuário abaixo e clique em remover");				
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Você não tem permissão para acessar este menu");
+			}
 		}
 	}
 }

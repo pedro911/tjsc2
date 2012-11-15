@@ -86,7 +86,7 @@ public class Login extends JFrame {
 				
 				UsuarioMB usuarioMB = UsuarioMB.getInstance();
 				
-				boolean resultado = usuarioMB.validarUsuario(txtUsuario.getText(), String.valueOf(txtSenha.getPassword()));
+				boolean resultado = usuarioMB.validarUsuarioLogin(txtUsuario.getText(), String.valueOf(txtSenha.getPassword()));
 				
 				JOptionPane.showMessageDialog(null, resultado);
 				
