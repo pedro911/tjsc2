@@ -1,4 +1,4 @@
-package com.fean.tjsc.mb.servico;
+package com.fean.tjsc.mb.motorista;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,30 +9,32 @@ import java.util.List;
 
 import com.fean.tjsc.dao.abastecimento.Abastecimento;
 import com.fean.tjsc.dao.abastecimento.AbastecimentoDAO;
-import com.fean.tjsc.dao.servico.Servico;
-import com.fean.tjsc.dao.servico.ServicoDAO;
+import com.fean.tjsc.dao.motorista.Motorista;
+import com.fean.tjsc.dao.motorista.MotoristaDAO;
+import com.fean.tjsc.dao.tiposervico.TipoServico;
+import com.fean.tjsc.dao.tiposervico.TipoServicoDAO;
 
 
 
 
-public class ServicoMB {
-	private static ServicoMB servicoMB = new ServicoMB();
+public class MotoristaMB {
+	private static MotoristaMB abastecimentoMB = new MotoristaMB();
 	
-	private ServicoMB(){
+	private MotoristaMB(){
 		
 	}
 	
-	public static ServicoMB getInstance(){
-		return servicoMB;
+	public static MotoristaMB getInstance(){
+		return abastecimentoMB;
 		
 	}
 	
-	public String inserir(Servico servico) {
+	public String inserir(Abastecimento abastecimento) {
 		
 		String retorno = "ok";
-		ServicoDAO daoServico = ServicoDAO.getInstance();
+		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
 		try {
-			daoServico.save(servico);
+			daoAbastecimento.save(abastecimento);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
@@ -69,19 +71,26 @@ public class ServicoMB {
 		
 	}
 
-	public List<Servico> finbByAll() throws ClassNotFoundException, SQLException{
-		ServicoDAO servicoDAO = ServicoDAO.getInstance();
-		return servicoDAO.findAll();
+	public List<Motorista> finbByAll() throws ClassNotFoundException, SQLException{
+		MotoristaDAO motoristaDAO = MotoristaDAO.getInstance();
+		return motoristaDAO.findAll();
 	}
 	
-	public String validarServico(Servico servico){
-		
-		String retorno = "ok";
-		
-		
-		
-		return retorno;
-		
+	public Integer retornarIdMotorista(String nome){
+		Integer id = 0;
+		Motorista temp = new Motorista();
+		MotoristaDAO motoristaDAO = MotoristaDAO.getInstance();
+		temp = (Motorista) motoristaDAO.findByNome(nome);
+		id = temp.getIdmotorista();		
+		return id;
 	}
 }
+
+
+
+
+
+
+
+
 

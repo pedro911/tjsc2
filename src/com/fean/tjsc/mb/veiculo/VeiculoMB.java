@@ -1,4 +1,4 @@
-package com.fean.tjsc.mb.servico;
+package com.fean.tjsc.mb.veiculo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,30 +9,30 @@ import java.util.List;
 
 import com.fean.tjsc.dao.abastecimento.Abastecimento;
 import com.fean.tjsc.dao.abastecimento.AbastecimentoDAO;
-import com.fean.tjsc.dao.servico.Servico;
-import com.fean.tjsc.dao.servico.ServicoDAO;
+import com.fean.tjsc.dao.veiculo.Veiculo;
+import com.fean.tjsc.dao.veiculo.VeiculoDAO;
 
 
 
 
-public class ServicoMB {
-	private static ServicoMB servicoMB = new ServicoMB();
+public class VeiculoMB {
+	private static VeiculoMB abastecimentoMB = new VeiculoMB();
 	
-	private ServicoMB(){
+	private VeiculoMB(){
 		
 	}
 	
-	public static ServicoMB getInstance(){
-		return servicoMB;
+	public static VeiculoMB getInstance(){
+		return abastecimentoMB;
 		
 	}
 	
-	public String inserir(Servico servico) {
+	public String inserir(Abastecimento abastecimento) {
 		
 		String retorno = "ok";
-		ServicoDAO daoServico = ServicoDAO.getInstance();
+		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
 		try {
-			daoServico.save(servico);
+			daoAbastecimento.save(abastecimento);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
@@ -69,19 +69,26 @@ public class ServicoMB {
 		
 	}
 
-	public List<Servico> finbByAll() throws ClassNotFoundException, SQLException{
-		ServicoDAO servicoDAO = ServicoDAO.getInstance();
-		return servicoDAO.findAll();
+	public List<Veiculo> finbByAll() throws ClassNotFoundException, SQLException{
+		VeiculoDAO veiculoDAO = VeiculoDAO.getInstance();
+		return veiculoDAO.findAll();
 	}
 	
-	public String validarServico(Servico servico){
-		
-		String retorno = "ok";
-		
-		
-		
-		return retorno;
-		
+	public Integer retornarIdVeiculo(String placa){
+		Integer id = 0;
+		Veiculo temp = new Veiculo();		
+		VeiculoDAO veiculoDAO = VeiculoDAO.getInstance();
+		temp = (Veiculo) veiculoDAO.findByPlaca(placa);
+		id = temp.getIdveiculo();		
+		return id;
 	}
 }
+
+
+
+
+
+
+
+
 

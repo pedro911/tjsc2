@@ -2,7 +2,10 @@ package com.fean.tjsc.visual.servico;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.sql.SQLException;
+import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.GroupLayout;
@@ -15,8 +18,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 
+import com.fean.tjsc.dao.servico.Servico;
+import com.fean.tjsc.mb.servico.ServicoMB;
+
 public class TelaListaServicosPendentes extends JPanel {
-	private JTable table;
+	private static JTable table;
 
 	/**
 	 * Create the panel.
@@ -69,17 +75,21 @@ public class TelaListaServicosPendentes extends JPanel {
 					.addContainerGap())
 		);
 		
+		
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"teste1", "troca oleo", "01/11/2012"},
-				{"teste2", "troca oleo", "14/11/2012"},
-				{"teste3", "troca pastilha freio", "25/11/2012"},
+				{"teste1", "XYZ9999", "troca oleo", "01/11/2012"},
+				{"teste2", "XYZ8888", "troca oleo", "14/11/2012"},
+				{"teste3", "XYZ7777", "troca pastilha freio", "25/11/2012"},
 			},
 			new String[] {
-				"Ve\u00EDculo", "Servi\u00E7o a fazer", "Data programada"
+				"Ve\u00EDculo", "Placa", "Servi\u00E7o a fazer", "Data programada"
 			}
 		));
+		table.getColumnModel().getColumn(2).setPreferredWidth(87);
+		
+		atualizaTabela();
 		
 		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {  
             public Component getTableCellRendererComponent(JTable table, Object value,  
@@ -101,10 +111,34 @@ public class TelaListaServicosPendentes extends JPanel {
                 return this;  
             }  
         });
-		
-		table.getColumnModel().getColumn(1).setPreferredWidth(87);
 		scrollPane.setViewportView(table);
 		setLayout(groupLayout);
 
+	}
+	
+	public static void atualizaTabela(){
+		//((DefaultTableModel)table.getModel()).setRowCount(0);
+		ServicoMB servicoMB = ServicoMB.getInstance();
+
+		try {
+			List<Servico> listaServicos = servicoMB.finbByAll();
+			for (int i=0;i<listaServicos.size();i++){
+				
+				((DefaultTableModel)table.getModel()).addRow(new String[] {
+						listaServicos.get(i).getVeiculo().getModelo().getNome(),
+						listaServicos.get(i).getVeiculo().getPlaca(),
+						listaServicos.get(i).getTipoServico().getNome(),
+						listaServicos.get(i).getData2()+""						
+				});
+			}
+		} catch (ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(null,"erro - "+e);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,"erro - "+e);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

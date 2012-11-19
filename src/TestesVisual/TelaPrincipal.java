@@ -16,6 +16,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
+import com.fean.tjsc.visual.servico.TelaCadastroServicoEfetuado;
+import com.fean.tjsc.visual.servico.TelaCadastroServicoEfetuado2;
 import com.fean.tjsc.visual.servico.TelaListaServicosPendentes;
 import com.fean.tjsc.visual.usuario.TelaCadastroUsuario;
 import com.fean.tjsc.visual.usuario.TelaListaUsuario;
@@ -30,6 +32,7 @@ import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import java.awt.CardLayout;
+import java.text.ParseException;
 
 public class TelaPrincipal extends JFrame {
 
@@ -42,6 +45,7 @@ public class TelaPrincipal extends JFrame {
 	private final Action action_3 = new SwingAction_3();
 	private final Action action_4 = new SwingAction_4();
 	private final Action action_5 = new SwingAction_5();
+	private final Action action_6 = new SwingAction_6();
 	
 	/**
 	 * Launch the application.
@@ -91,6 +95,10 @@ public class TelaPrincipal extends JFrame {
 		
 		JMenu mnServios = new JMenu("Servi\u00E7os");
 		menuBar.add(mnServios);
+		
+		JMenuItem mntmRegistrarServioEfetuado = new JMenuItem("Registrar Servi\u00E7o Efetuado");
+		mntmRegistrarServioEfetuado.setAction(action_6);
+		mnServios.add(mntmRegistrarServioEfetuado);
 		
 		JMenu mnNewMenu = new JMenu("Listar");
 		mnServios.add(mnNewMenu);
@@ -221,6 +229,26 @@ public class TelaPrincipal extends JFrame {
 			if(adm == true){
 				trocaTela(new TelaListaUsuario());
 				JOptionPane.showMessageDialog(null, "Selecione um usuário abaixo e clique em remover");				
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Você não tem permissão para acessar este menu");
+			}
+		}
+	}
+	private class SwingAction_6 extends AbstractAction {
+		public SwingAction_6() {
+			putValue(NAME, "Registrar Serviço Efetuado");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			
+			if(adm == true){
+				try {
+					trocaTela(new TelaCadastroServicoEfetuado2());
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Você não tem permissão para acessar este menu");

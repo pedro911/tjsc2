@@ -1,4 +1,4 @@
-package com.fean.tjsc.mb.servico;
+package com.fean.tjsc.mb.fornecedor;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,30 +9,30 @@ import java.util.List;
 
 import com.fean.tjsc.dao.abastecimento.Abastecimento;
 import com.fean.tjsc.dao.abastecimento.AbastecimentoDAO;
-import com.fean.tjsc.dao.servico.Servico;
-import com.fean.tjsc.dao.servico.ServicoDAO;
+import com.fean.tjsc.dao.fornecedor.Fornecedor;
+import com.fean.tjsc.dao.fornecedor.FornecedorDAO;
 
 
 
 
-public class ServicoMB {
-	private static ServicoMB servicoMB = new ServicoMB();
+public class FornecedorMB {
+	private static FornecedorMB abastecimentoMB = new FornecedorMB();
 	
-	private ServicoMB(){
+	private FornecedorMB(){
 		
 	}
 	
-	public static ServicoMB getInstance(){
-		return servicoMB;
+	public static FornecedorMB getInstance(){
+		return abastecimentoMB;
 		
 	}
 	
-	public String inserir(Servico servico) {
+	public String inserir(Abastecimento abastecimento) {
 		
 		String retorno = "ok";
-		ServicoDAO daoServico = ServicoDAO.getInstance();
+		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
 		try {
-			daoServico.save(servico);
+			daoAbastecimento.save(abastecimento);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
@@ -69,19 +69,19 @@ public class ServicoMB {
 		
 	}
 
-	public List<Servico> finbByAll() throws ClassNotFoundException, SQLException{
-		ServicoDAO servicoDAO = ServicoDAO.getInstance();
-		return servicoDAO.findAll();
+	public List<Fornecedor> finbByAll() throws ClassNotFoundException, SQLException{
+		FornecedorDAO fornecedorDAO = FornecedorDAO.getInstance();
+		return fornecedorDAO.findAll();
 	}
 	
-	public String validarServico(Servico servico){
-		
-		String retorno = "ok";
-		
-		
-		
-		return retorno;
-		
+	public Integer retornarIdFornecedor(String nome){
+		Integer id = 0;
+		Fornecedor temp = new Fornecedor();
+		FornecedorDAO fornecedorDAO = FornecedorDAO.getInstance();
+		temp = (Fornecedor) fornecedorDAO.findByNome(nome);
+		id = temp.getIdfornecedor();		
+		return id;
 	}
+	
 }
 

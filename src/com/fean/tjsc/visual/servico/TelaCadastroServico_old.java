@@ -14,12 +14,12 @@ import java.awt.Component;
  *
  * @author victor.viana
  */
-public class TelaServico_ModeloParaTodas extends javax.swing.JInternalFrame {
+public class TelaCadastroServico_old extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form TelaServico
      */
-    public TelaServico_ModeloParaTodas() {
+    public TelaCadastroServico_old() {
         initComponents();
     }
 
