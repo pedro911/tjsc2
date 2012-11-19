@@ -1,4 +1,4 @@
-package TestesVisual;
+package com.fean.tjsc.visual.principal;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;

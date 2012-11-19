@@ -18,7 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 
-import TestesVisual.TelaPrincipal;
 
 import com.fean.tjsc.mb.marca.MarcaMB;
 import com.fean.tjsc.mb.usuario.UsuarioMB;

@@ -13,10 +13,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 
-import TestesVisual.TelaPrincipal;
 
 import com.fean.tjsc.dao.usuario.Usuario;
 import com.fean.tjsc.mb.usuario.UsuarioMB;
+import com.fean.tjsc.visual.principal.TelaPrincipal;
 
 import java.awt.Color;
 import java.awt.event.MouseAdapter;

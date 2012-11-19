@@ -15,12 +15,13 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 
-import TestesVisual.TelaPrincipal;
 
 import com.fean.tjsc.dao.abastecimento.Abastecimento;
 import com.fean.tjsc.dao.usuario.Usuario;
 import com.fean.tjsc.mb.abastecimento.AbastecimentoMB;
 import com.fean.tjsc.mb.usuario.UsuarioMB;
+import com.fean.tjsc.visual.principal.TelaPrincipal;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
