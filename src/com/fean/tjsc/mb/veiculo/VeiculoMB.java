@@ -9,6 +9,8 @@ import java.util.List;
 
 import com.fean.tjsc.dao.abastecimento.Abastecimento;
 import com.fean.tjsc.dao.abastecimento.AbastecimentoDAO;
+import com.fean.tjsc.dao.usuario.Usuario;
+import com.fean.tjsc.dao.usuario.UsuarioDAO;
 import com.fean.tjsc.dao.veiculo.Veiculo;
 import com.fean.tjsc.dao.veiculo.VeiculoDAO;
 
@@ -76,10 +78,9 @@ public class VeiculoMB {
 	
 	public Integer retornarIdVeiculo(String placa){
 		Integer id = 0;
-		Veiculo temp = new Veiculo();		
 		VeiculoDAO veiculoDAO = VeiculoDAO.getInstance();
-		temp = (Veiculo) veiculoDAO.findByPlaca(placa);
-		id = temp.getIdveiculo();		
+		List<Veiculo> rs = veiculoDAO.findByPlaca(placa);
+		id = rs.get(0).getIdveiculo();		
 		return id;
 	}
 }

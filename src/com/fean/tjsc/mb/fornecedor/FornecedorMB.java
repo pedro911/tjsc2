@@ -76,10 +76,9 @@ public class FornecedorMB {
 	
 	public Integer retornarIdFornecedor(String nome){
 		Integer id = 0;
-		Fornecedor temp = new Fornecedor();
 		FornecedorDAO fornecedorDAO = FornecedorDAO.getInstance();
-		temp = (Fornecedor) fornecedorDAO.findByNome(nome);
-		id = temp.getIdfornecedor();		
+		List<Fornecedor> rs = fornecedorDAO.findByNome(nome);
+		id = rs.get(0).getIdfornecedor();		
 		return id;
 	}
 	

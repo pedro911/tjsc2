@@ -78,10 +78,9 @@ public class MotoristaMB {
 	
 	public Integer retornarIdMotorista(String nome){
 		Integer id = 0;
-		Motorista temp = new Motorista();
 		MotoristaDAO motoristaDAO = MotoristaDAO.getInstance();
-		temp = (Motorista) motoristaDAO.findByNome(nome);
-		id = temp.getIdmotorista();		
+		List<Motorista> rs = motoristaDAO.findByNome(nome);
+		id = rs.get(0).getIdmotorista();		
 		return id;
 	}
 }

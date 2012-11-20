@@ -78,10 +78,9 @@ public class TipoServicoMB {
 	
 	public Integer retornarIdTipoServico(String nome){
 		Integer id = 0;
-		TipoServico temp = new TipoServico();
 		TipoServicoDAO tiposervicoDAO = TipoServicoDAO.getInstance();
-		temp = (TipoServico) tiposervicoDAO.findByNome(nome);
-		id = temp.getIdtipoServico();		
+		List<TipoServico> rs = tiposervicoDAO.findByNome(nome);
+		id = rs.get(0).getIdtipoServico();		
 		return id;
 	}
 }

@@ -1,5 +1,6 @@
 package com.fean.tjsc.visual.servico;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -16,17 +17,20 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.MaskFormatter;
 
 import com.fean.tjsc.dao.fornecedor.Fornecedor;
 import com.fean.tjsc.dao.motorista.Motorista;
 import com.fean.tjsc.dao.servico.Servico;
 import com.fean.tjsc.dao.tiposervico.TipoServico;
+import com.fean.tjsc.dao.usuario.Usuario;
 import com.fean.tjsc.dao.veiculo.Veiculo;
 import com.fean.tjsc.mb.fornecedor.FornecedorMB;
 import com.fean.tjsc.mb.motorista.MotoristaMB;
 import com.fean.tjsc.mb.servico.ServicoMB;
 import com.fean.tjsc.mb.tiposervico.TipoServicoMB;
+import com.fean.tjsc.mb.usuario.UsuarioMB;
 import com.fean.tjsc.mb.veiculo.VeiculoMB;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -43,6 +47,8 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 	private JTextArea txtDescricao;
 	private JFormattedTextField txtKM;
 	private JFormattedTextField txtValor;
+	private JFormattedTextField txtData;
+	private Date data;
 
 	/**
 	 * Create the panel.
@@ -81,7 +87,7 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 		
 		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
 		
-		JFormattedTextField txtData = new JFormattedTextField(mascaraData);
+		txtData = new JFormattedTextField(mascaraData);
 		
 		JLabel lblValor = new JLabel("Valor:");
 		lblValor.setHorizontalAlignment(SwingConstants.CENTER);
@@ -91,6 +97,7 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 				
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.addMouseListener(new MouseAdapter() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				String retorno = "";
@@ -109,6 +116,8 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 				MotoristaMB mbMotorista = MotoristaMB.getInstance();
 				TipoServicoMB mbTipoServico = TipoServicoMB.getInstance();
 				FornecedorMB mbFornecedor = FornecedorMB.getInstance();
+				//UsuarioMB mbUsuario = UsuarioMB.getInstance();
+				
 				
 				veic.setIdveiculo(mbVeiculo.retornarIdVeiculo((String) comboBoxVeiculo.getSelectedItem()));
 				serv.setVeiculo(veic);
@@ -122,14 +131,31 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 				tiposerv.setIdtipoServico(mbTipoServico.retornarIdTipoServico((String) comboBoxTipoServico.getSelectedItem()));
 				serv.setTipoServico(tiposerv);
 				
+				Usuario user = new Usuario();
+				user.setIdusuario(1);
+				serv.setUsuario(user);
+				
 				// ver como fazer as mascaras para inserir a data...
-				//serv.setData2(txtData.getText());
+				//dando erroooo
+				try {
+					data.setDate(01);
+					data.setMonth(01);
+					data.setYear(2012);
+					//data.setDate(Integer.parseInt(txtData.getText(0, 2)));
+					//data.setMonth(Integer.parseInt(txtData.getText(3, 2)));
+					//data.setYear(Integer.parseInt(txtData.getText(6, 4)));	
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+											
+				serv.setData2(data);
 				
 				serv.setNroOrcamento(txtOrcamento.getText());
 				serv.setNfTicket(Integer.parseInt(txtNF.getText()));
 				serv.setDescricao(txtDescricao.getText());
 				serv.setKm(Integer.parseInt(txtKM.getText()));				
-				serv.setValor(Double.parseDouble(txtValor.getText()));
+				serv.setValor(Double.parseDouble(txtValor.getText()));				
 				
 				retorno = mbServico.validarServico(serv);
 				
