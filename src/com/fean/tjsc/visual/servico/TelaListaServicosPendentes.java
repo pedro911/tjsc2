@@ -3,6 +3,8 @@ package com.fean.tjsc.visual.servico;
 import java.awt.Color;
 import java.awt.Component;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -119,16 +121,27 @@ public class TelaListaServicosPendentes extends JPanel {
 	public static void atualizaTabela(){
 		//((DefaultTableModel)table.getModel()).setRowCount(0);
 		ServicoMB servicoMB = ServicoMB.getInstance();
+		String dataUtil = "";
+		String datafim = "";
 
 		try {
 			List<Servico> listaServicos = servicoMB.finbByAll();
 			for (int i=0;i<listaServicos.size();i++){
-				
+				SimpleDateFormat dataBr = new SimpleDateFormat("dd/MM/yyyy");
+				SimpleDateFormat mysql = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				try {
+					dataBr.parse(mysql.format(listaServicos.get(i).getData2()));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				datafim = dataBr.toString();	
+							
 				((DefaultTableModel)table.getModel()).addRow(new String[] {
 						listaServicos.get(i).getVeiculo().getModelo().getNome(),
 						listaServicos.get(i).getVeiculo().getPlaca(),
 						listaServicos.get(i).getTipoServico().getNome(),
-						listaServicos.get(i).getData2()+""						
+						datafim						
 				});
 			}
 		} catch (ClassNotFoundException e) {

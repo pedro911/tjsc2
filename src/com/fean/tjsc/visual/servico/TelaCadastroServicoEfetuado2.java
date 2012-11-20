@@ -2,8 +2,11 @@ package com.fean.tjsc.visual.servico;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -48,53 +51,52 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 	private JFormattedTextField txtKM;
 	private JFormattedTextField txtValor;
 	private JFormattedTextField txtData;
-	private Date data;
+	private java.util.Date data;	
 
 	/**
 	 * Create the panel.
 	 * @throws ParseException 
 	 */
 	public TelaCadastroServicoEfetuado2() throws ParseException {
-		
+
 		JLabel lblRegistroDeServio = new JLabel("Registro de Servi\u00E7o Efetuado no Ve\u00EDculo");
 		lblRegistroDeServio.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		JLabel lblVeculo = new JLabel("Ve\u00EDculo:");
-		
+
 		JLabel lblMotorista = new JLabel("Motorista:");
-		
+
 		JLabel lblFornecedor = new JLabel("Fornecedor:");
-		
+
 		JLabel lblTipoDoServio = new JLabel("Tipo do Servi\u00E7o:");
-		
+
 		listarVeiculos();
 		listarFornecedores();
 		listarMotoristas();
 		listarTiposServico();
-						
+
 		txtOrcamento = new JTextField();
 		txtOrcamento.setColumns(10);
-		
+
 		txtNF = new JTextField();
 		txtNF.setColumns(10);
-		
+
 		txtDescricao = new JTextArea();
 		txtKM = new JFormattedTextField();
 		txtValor = new JFormattedTextField();
-		
+
 		JLabel lblData = new JLabel("Data:");
 		lblData.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
-		
+
+		MaskFormatter mascaraData = new MaskFormatter("##/##/####");		
 		txtData = new JFormattedTextField(mascaraData);
-		
+
 		JLabel lblValor = new JLabel("Valor:");
 		lblValor.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		JLabel lblKm = new JLabel("Km:");
 		lblKm.setHorizontalAlignment(SwingConstants.CENTER);
-				
+
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.addMouseListener(new MouseAdapter() {
 			@SuppressWarnings("deprecation")
@@ -110,55 +112,67 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 				TipoServico tiposerv = new TipoServico();
 				Motorista mot = new Motorista();
 				Fornecedor forn = new Fornecedor();
-				
+
 				ServicoMB mbServico = ServicoMB.getInstance();
 				VeiculoMB mbVeiculo = VeiculoMB.getInstance();
 				MotoristaMB mbMotorista = MotoristaMB.getInstance();
 				TipoServicoMB mbTipoServico = TipoServicoMB.getInstance();
 				FornecedorMB mbFornecedor = FornecedorMB.getInstance();
 				//UsuarioMB mbUsuario = UsuarioMB.getInstance();
-				
-				
+
+
 				veic.setIdveiculo(mbVeiculo.retornarIdVeiculo((String) comboBoxVeiculo.getSelectedItem()));
 				serv.setVeiculo(veic);
-				
+
 				forn.setIdfornecedor(mbFornecedor.retornarIdFornecedor((String) comboBoxFornecedor.getSelectedItem()));
 				serv.setFornecedor(forn);
-				
+
 				mot.setIdmotorista(mbMotorista.retornarIdMotorista((String) comboBoxMotorista.getSelectedItem()));
 				serv.setMotorista(mot);
-				
+
 				tiposerv.setIdtipoServico(mbTipoServico.retornarIdTipoServico((String) comboBoxTipoServico.getSelectedItem()));
 				serv.setTipoServico(tiposerv);
-				
+
 				Usuario user = new Usuario();
 				user.setIdusuario(1);
 				serv.setUsuario(user);
-				
+
 				// ver como fazer as mascaras para inserir a data...
-				//dando erroooo
+
+				/*
 				try {
-					data.setDate(01);
-					data.setMonth(01);
-					data.setYear(2012);
-					//data.setDate(Integer.parseInt(txtData.getText(0, 2)));
-					//data.setMonth(Integer.parseInt(txtData.getText(3, 2)));
-					//data.setYear(Integer.parseInt(txtData.getText(6, 4)));	
-				} catch (NumberFormatException e) {
+					DateFormat dateFormat;
+					dateFormat = new SimpleDateFormat(txtData.getText(6, 4)+txtData.getText(3, 2)+txtData.getText(0, 2));
+					dateFormat.format(data);
+				} catch (BadLocationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-											
-				serv.setData2(data);
-				
+				 */
+
+				try {
+					SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+					java.util.Date dataUtil = df.parse(txtData.getText());
+					// converter de java.util.Date para java.sql.Date
+					java.sql.Date dataJDBC = new java.sql.Date(dataUtil.getTime());
+					// converter java.util.Date para String (formato diferente do acima)
+					// idem para java.sql.Date que é uma subclasse do java.util.Date
+					SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd");
+					iso.format(dataUtil);
+					serv.setData2(dataJDBC);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}			
+
 				serv.setNroOrcamento(txtOrcamento.getText());
 				serv.setNfTicket(Integer.parseInt(txtNF.getText()));
 				serv.setDescricao(txtDescricao.getText());
 				serv.setKm(Integer.parseInt(txtKM.getText()));				
 				serv.setValor(Double.parseDouble(txtValor.getText()));				
-				
+
 				retorno = mbServico.validarServico(serv);
-				
+
 				if (retorno == "ok"){
 					mbServico.inserir(serv);
 					JOptionPane.showMessageDialog(null, "Serviço cadastrado com sucesso");
@@ -166,130 +180,130 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 				else{
 					JOptionPane.showMessageDialog(null, retorno);
 				}			
-				
+
 			}
 		});
-		
+
 		JLabel lblNmeroDoOramento = new JLabel("N\u00FAmero do Or\u00E7amento:");
 		lblNmeroDoOramento.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		JLabel lblNmeroDaNota = new JLabel("N\u00FAmero da Nota Fiscal ou Ticket:");
 		lblNmeroDaNota.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		JLabel lblDescrio = new JLabel("Descri\u00E7\u00E3o:");
 		lblDescrio.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
-				
+
 		scrollPane.setViewportView(txtDescricao);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+				groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(100)
-					.addComponent(lblRegistroDeServio, GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
-					.addGap(37))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(10)
-					.addComponent(lblFornecedor, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
-					.addGap(70)
-					.addComponent(lblData, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-					.addGap(37)
-					.addComponent(lblValor, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
-					.addGap(27)
-					.addComponent(lblKm, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(10)
-					.addComponent(comboBoxFornecedor, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-					.addGap(28)
-					.addComponent(txtData, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(txtValor, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(txtKM, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(10)
-					.addComponent(lblMotorista, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
-					.addGap(129)
-					.addComponent(lblDescrio, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(10)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(comboBoxMotorista, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblTipoDoServio, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboBoxTipoServico, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
-					.addGap(28)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
-					.addGap(14))
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addGap(611)
-					.addComponent(btnSalvar)
-					.addGap(14))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(10)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(comboBoxVeiculo, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblVeculo, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE))
-					.addGap(28)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGap(100)
+						.addComponent(lblRegistroDeServio, GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
+						.addGap(37))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblNmeroDoOramento, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
-							.addGap(92)
-							.addComponent(lblNmeroDaNota, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(txtOrcamento, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-							.addGap(36)
-							.addComponent(txtNF, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)))
-					.addGap(14))
-		);
+								.addGap(10)
+								.addComponent(lblFornecedor, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
+								.addGap(70)
+								.addComponent(lblData, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+								.addGap(37)
+								.addComponent(lblValor, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
+								.addGap(27)
+								.addComponent(lblKm, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+										.addGap(10)
+										.addComponent(comboBoxFornecedor, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+										.addGap(28)
+										.addComponent(txtData, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+										.addGap(18)
+										.addComponent(txtValor, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+										.addGap(18)
+										.addComponent(txtKM, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
+										.addGroup(groupLayout.createSequentialGroup()
+												.addGap(10)
+												.addComponent(lblMotorista, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
+												.addGap(129)
+												.addComponent(lblDescrio, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE))
+												.addGroup(groupLayout.createSequentialGroup()
+														.addGap(10)
+														.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+																.addComponent(comboBoxMotorista, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+																.addComponent(lblTipoDoServio, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
+																.addComponent(comboBoxTipoServico, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+																.addGap(28)
+																.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+																.addGap(14))
+																.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+																		.addGap(611)
+																		.addComponent(btnSalvar)
+																		.addGap(14))
+																		.addGroup(groupLayout.createSequentialGroup()
+																				.addGap(10)
+																				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+																						.addComponent(comboBoxVeiculo, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+																						.addComponent(lblVeculo, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE))
+																						.addGap(28)
+																						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+																								.addGroup(groupLayout.createSequentialGroup()
+																										.addComponent(lblNmeroDoOramento, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
+																										.addGap(92)
+																										.addComponent(lblNmeroDaNota, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
+																										.addGroup(groupLayout.createSequentialGroup()
+																												.addComponent(txtOrcamento, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+																												.addGap(36)
+																												.addComponent(txtNF, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)))
+																												.addGap(14))
+				);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+				groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(11)
-					.addComponent(lblRegistroDeServio)
-					.addGap(12)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblVeculo)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblNmeroDoOramento)
-							.addComponent(lblNmeroDaNota)))
-					.addGap(11)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(comboBoxVeiculo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtOrcamento, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtNF, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(19)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblFornecedor)
-						.addComponent(lblData)
-						.addComponent(lblValor)
-						.addComponent(lblKm))
-					.addGap(11)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(comboBoxFornecedor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtData, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtValor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtKM, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblMotorista)
-						.addComponent(lblDescrio))
-					.addGap(11)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(comboBoxMotorista, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(lblTipoDoServio)
-							.addGap(11)
-							.addComponent(comboBoxTipoServico, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE))
-					.addGap(21)
-					.addComponent(btnSalvar))
-		);
+						.addGap(11)
+						.addComponent(lblRegistroDeServio)
+						.addGap(12)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblVeculo)
+								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(lblNmeroDoOramento)
+										.addComponent(lblNmeroDaNota)))
+										.addGap(11)
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+												.addComponent(comboBoxVeiculo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(txtOrcamento, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(txtNF, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+												.addGap(19)
+												.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+														.addComponent(lblFornecedor)
+														.addComponent(lblData)
+														.addComponent(lblValor)
+														.addComponent(lblKm))
+														.addGap(11)
+														.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+																.addComponent(comboBoxFornecedor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+																.addComponent(txtData, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+																.addComponent(txtValor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+																.addComponent(txtKM, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+																.addGap(18)
+																.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+																		.addComponent(lblMotorista)
+																		.addComponent(lblDescrio))
+																		.addGap(11)
+																		.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+																				.addGroup(groupLayout.createSequentialGroup()
+																						.addComponent(comboBoxMotorista, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+																						.addGap(18)
+																						.addComponent(lblTipoDoServio)
+																						.addGap(11)
+																						.addComponent(comboBoxTipoServico, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+																						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE))
+																						.addGap(21)
+																						.addComponent(btnSalvar))
+				);
 		setLayout(groupLayout);
 
 	}
-	
+
 	public void listarVeiculos(){
 		VeiculoMB mbVeiculo = VeiculoMB.getInstance();		
 		List<Veiculo> veiculos;
@@ -308,7 +322,7 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void listarFornecedores(){
 		FornecedorMB mbFornecedor = FornecedorMB.getInstance();		
 		List<Fornecedor> fornecedores;
@@ -327,7 +341,7 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void listarMotoristas(){
 		MotoristaMB mbMotorista = MotoristaMB.getInstance();		
 		List<Motorista> motoristas;
@@ -346,7 +360,7 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void listarTiposServico(){
 		TipoServicoMB mbTipoServico = TipoServicoMB.getInstance();		
 		List<TipoServico> tiposServico;
@@ -365,4 +379,5 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 			e.printStackTrace();
 		}
 	}
+
 }
