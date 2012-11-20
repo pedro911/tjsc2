@@ -121,27 +121,25 @@ public class TelaListaServicosPendentes extends JPanel {
 	public static void atualizaTabela(){
 		//((DefaultTableModel)table.getModel()).setRowCount(0);
 		ServicoMB servicoMB = ServicoMB.getInstance();
-		String dataUtil = "";
-		String datafim = "";
+		String dataBR = "";
 
 		try {
 			List<Servico> listaServicos = servicoMB.finbByAll();
 			for (int i=0;i<listaServicos.size();i++){
-				SimpleDateFormat dataBr = new SimpleDateFormat("dd/MM/yyyy");
-				SimpleDateFormat mysql = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				SimpleDateFormat in= new SimpleDateFormat("yyyy-MM-dd");  
+				SimpleDateFormat out = new SimpleDateFormat("dd/MM/yyyy");  				  
 				try {
-					dataBr.parse(mysql.format(listaServicos.get(i).getData2()));
+					dataBR = out.format(in.parse(listaServicos.get(i).getData2().toString()));
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				datafim = dataBr.toString();	
 							
 				((DefaultTableModel)table.getModel()).addRow(new String[] {
 						listaServicos.get(i).getVeiculo().getModelo().getNome(),
 						listaServicos.get(i).getVeiculo().getPlaca(),
 						listaServicos.get(i).getTipoServico().getNome(),
-						datafim						
+						dataBR						
 				});
 			}
 		} catch (ClassNotFoundException e) {

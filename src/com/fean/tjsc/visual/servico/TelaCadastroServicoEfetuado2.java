@@ -35,6 +35,8 @@ import com.fean.tjsc.mb.servico.ServicoMB;
 import com.fean.tjsc.mb.tiposervico.TipoServicoMB;
 import com.fean.tjsc.mb.usuario.UsuarioMB;
 import com.fean.tjsc.mb.veiculo.VeiculoMB;
+import com.fean.tjsc.visual.principal.TelaPrincipal;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JScrollPane;
@@ -176,6 +178,7 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 				if (retorno == "ok"){
 					mbServico.inserir(serv);
 					JOptionPane.showMessageDialog(null, "Serviço cadastrado com sucesso");
+					voltarTelaListagem();
 				}
 				else{
 					JOptionPane.showMessageDialog(null, retorno);
@@ -378,6 +381,13 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public void voltarTelaListagem(){
+		TelaPrincipal parent = (TelaPrincipal)getParent().getParent().getParent().getParent();
+		parent.getContentPane().removeAll();
+		parent.getContentPane().add(new TelaListaServicosPendentes());
+		parent.getContentPane().validate();   
+		parent.getContentPane().repaint();
 	}
 
 }
