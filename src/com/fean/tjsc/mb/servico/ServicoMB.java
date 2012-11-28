@@ -11,6 +11,7 @@ import com.fean.tjsc.dao.abastecimento.Abastecimento;
 import com.fean.tjsc.dao.abastecimento.AbastecimentoDAO;
 import com.fean.tjsc.dao.servico.Servico;
 import com.fean.tjsc.dao.servico.ServicoDAO;
+import com.fean.tjsc.dao.veiculo.Veiculo;
 
 
 
@@ -39,11 +40,11 @@ public class ServicoMB {
 		return retorno;
 	}
 	
-	public String editar(Abastecimento abastecimento) {
+	public String editar(Servico servico) {
 		String retorno = "ok";
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
+		ServicoDAO daoServico = ServicoDAO.getInstance();
 		try {
-			daoAbastecimento.update(abastecimento);
+			daoServico.update(servico);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
@@ -74,6 +75,15 @@ public class ServicoMB {
 		return servicoDAO.findAll();
 	}
 	
+	public Servico finbById(int id) throws ClassNotFoundException, SQLException{
+		ServicoDAO servicoDAO = ServicoDAO.getInstance();
+		return servicoDAO.findById(id);
+	}
+	public Servico findMaxServico(Veiculo veiculo) throws ClassNotFoundException, SQLException{
+		ServicoDAO servicoDAO = ServicoDAO.getInstance();
+		return servicoDAO.findMaxServico(veiculo);
+	}
+	
 	public String validarServico(Servico servico){
 		
 		String retorno = "ok";
@@ -83,5 +93,6 @@ public class ServicoMB {
 		return retorno;
 		
 	}
+	
 }
 

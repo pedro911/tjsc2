@@ -184,5 +184,16 @@ return retorno;
 		UsuarioDAO usuarioDAO = UsuarioDAO.getInstance();				
 		return usuarioDAO.findByNome(nome);
 	}
+	
+	public Usuario findById(String nome){
+		Usuario user = new Usuario();
+		
+		UsuarioDAO usuarioDAO = UsuarioDAO.getInstance();
+		List<Usuario> rs = usuarioDAO.findByNome(nome);
+		user.setIdusuario(rs.get(0).getIdusuario());
+		user = usuarioDAO.findById(user.getIdusuario());
+		
+		return user;
+	}
 
 }

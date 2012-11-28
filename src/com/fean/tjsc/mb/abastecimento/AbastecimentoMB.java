@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.fean.tjsc.dao.abastecimento.Abastecimento;
 import com.fean.tjsc.dao.abastecimento.AbastecimentoDAO;
+import com.fean.tjsc.dao.veiculo.Veiculo;
 
 
 
@@ -70,6 +71,11 @@ public class AbastecimentoMB {
 	public List<Abastecimento> finbByAll() throws ClassNotFoundException, SQLException{
 		AbastecimentoDAO abastecimentoDAO = AbastecimentoDAO.getInstance();
 		return abastecimentoDAO.findAll();
+	}
+	
+	public Abastecimento findMinAbastecimento(Veiculo veiculo) throws ClassNotFoundException, SQLException{
+		AbastecimentoDAO abastecimentoDAO = AbastecimentoDAO.getInstance();
+		return abastecimentoDAO.findMinAbastecimento(veiculo);
 	}
 }
 

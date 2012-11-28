@@ -76,20 +76,5 @@ public class MotoristaMB {
 		return motoristaDAO.findAll();
 	}
 	
-	public Integer retornarIdMotorista(String nome){
-		Integer id = 0;
-		MotoristaDAO motoristaDAO = MotoristaDAO.getInstance();
-		List<Motorista> rs = motoristaDAO.findByNome(nome);
-		id = rs.get(0).getIdmotorista();		
-		return id;
-	}
 }
-
-
-
-
-
-
-
-
 

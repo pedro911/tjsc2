@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.fean.tjsc.dao.utils.EntityManagerHelper;
+import com.fean.tjsc.dao.veiculo.Veiculo;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -193,7 +194,7 @@ public class ServicoDAO implements IServicoDAO {
 
 	public List<Servico> findByKm(Object km) {
 		return findByProperty(KM, km);
-	}
+	}	
 
 	/**
 	 * Find all Servico entities.
@@ -210,6 +211,21 @@ public class ServicoDAO implements IServicoDAO {
 			return query.getResultList();
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("find all failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	public  Servico findMaxServico(Veiculo veiculo) {
+		
+		Servico servico =null;
+		try {
+			Query query = getEntityManager().createNamedQuery("Servico.UltimoServico");
+			query.setParameter("veiculo", veiculo);
+			if(query.getSingleResult() != null){
+				servico = (Servico) query.getSingleResult();
+			}
+			return servico;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("find failed", Level.SEVERE, re);
 			throw re;
 		}
 	}

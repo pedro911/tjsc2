@@ -96,5 +96,11 @@ public class TipoServico implements java.io.Serializable {
 	public void setTipoServicoModelos(Set<TipoServicoModelo> tipoServicoModelos) {
 		this.tipoServicoModelos = tipoServicoModelos;
 	}
+	
+	@Override	
+	public String toString() {
+	        return this.nome;
+	}
+
 
 }

@@ -115,5 +115,10 @@ public class Fornecedor implements java.io.Serializable {
 	public void setServicos(Set<Servico> servicos) {
 		this.servicos = servicos;
 	}
+	
+	@Override	
+	public String toString() {
+	        return this.nome;
+	}
 
 }

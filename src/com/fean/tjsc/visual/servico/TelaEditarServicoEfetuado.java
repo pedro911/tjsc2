@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
@@ -42,24 +43,26 @@ import java.awt.event.MouseEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class TelaCadastroServicoEfetuado2 extends JPanel {
+public class TelaEditarServicoEfetuado extends JPanel {
 	private JTextField txtOrcamento;
 	private JTextField txtNF;
 	private JComboBox<String> comboBoxVeiculo = new JComboBox<String>();
 	private JComboBox<String> comboBoxFornecedor = new JComboBox<String>();
 	private JComboBox<String> comboBoxMotorista = new JComboBox<String>();
-	private	JComboBox<String> comboBoxTipoServico = new JComboBox<String>();
+	private JComboBox<String> comboBoxTipoServico = new JComboBox<String>();
 	private JTextArea txtDescricao;
 	private JFormattedTextField txtKM;
 	private JFormattedTextField txtValor;
 	private JFormattedTextField txtData;
-	private java.util.Date data;	
+	public static Servico servicoEdicao = new Servico();
+	java.util.Date data;
+	public static Usuario user = new Usuario();
 
 	/**
 	 * Create the panel.
 	 * @throws ParseException 
 	 */
-	public TelaCadastroServicoEfetuado2() throws ParseException {
+	public TelaEditarServicoEfetuado() throws ParseException {
 
 		JLabel lblRegistroDeServio = new JLabel("Registro de Servi\u00E7o Efetuado no Ve\u00EDculo");
 		lblRegistroDeServio.setHorizontalAlignment(SwingConstants.CENTER);
@@ -78,20 +81,36 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 		listarTiposServico();
 
 		txtOrcamento = new JTextField();
+		txtOrcamento.setText(servicoEdicao.getNroOrcamento());
 		txtOrcamento.setColumns(10);
 
 		txtNF = new JTextField();
+		txtNF.setText(servicoEdicao.getNfTicket()+"");
 		txtNF.setColumns(10);
 
 		txtDescricao = new JTextArea();
+		txtDescricao.setText(servicoEdicao.getDescricao());
+		
 		txtKM = new JFormattedTextField();
+		txtKM.setText(servicoEdicao.getKm()+"");
+		
 		txtValor = new JFormattedTextField();
+		txtValor.setText(servicoEdicao.getValor()+"");
 
 		JLabel lblData = new JLabel("Data:");
 		lblData.setHorizontalAlignment(SwingConstants.CENTER);
 
 		MaskFormatter mascaraData = new MaskFormatter("##/##/####");		
 		txtData = new JFormattedTextField(mascaraData);
+		
+		SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd");  
+		SimpleDateFormat out = new SimpleDateFormat("dd/MM/yyyy");  				  
+		try {
+			txtData.setText(out.format(in.parse(servicoEdicao.getData2().toString())));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		JLabel lblValor = new JLabel("Valor:");
 		lblValor.setHorizontalAlignment(SwingConstants.CENTER);
@@ -105,53 +124,9 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				String retorno = "";
-				// veiculo
-				//fornecedor
-				//motorista
-				//tipo servico
-				Servico serv = new Servico();
-				Veiculo veic = new Veiculo();
-				TipoServico tiposerv = new TipoServico();
-				Motorista mot = new Motorista();
-				Fornecedor forn = new Fornecedor();
-
+				Servico serv = new Servico();				
 				ServicoMB mbServico = ServicoMB.getInstance();
-				VeiculoMB mbVeiculo = VeiculoMB.getInstance();
-				MotoristaMB mbMotorista = MotoristaMB.getInstance();
-				TipoServicoMB mbTipoServico = TipoServicoMB.getInstance();
-				FornecedorMB mbFornecedor = FornecedorMB.getInstance();
-				//UsuarioMB mbUsuario = UsuarioMB.getInstance();
-
-
-				veic.setIdveiculo(mbVeiculo.retornarIdVeiculo((String) comboBoxVeiculo.getSelectedItem()));
-				serv.setVeiculo(veic);
-
-				forn.setIdfornecedor(mbFornecedor.retornarIdFornecedor((String) comboBoxFornecedor.getSelectedItem()));
-				serv.setFornecedor(forn);
-
-				mot.setIdmotorista(mbMotorista.retornarIdMotorista((String) comboBoxMotorista.getSelectedItem()));
-				serv.setMotorista(mot);
-
-				tiposerv.setIdtipoServico(mbTipoServico.retornarIdTipoServico((String) comboBoxTipoServico.getSelectedItem()));
-				serv.setTipoServico(tiposerv);
-
-				Usuario user = new Usuario();
-				user.setIdusuario(1);
-				serv.setUsuario(user);
-
-				// ver como fazer as mascaras para inserir a data...
-
-				/*
-				try {
-					DateFormat dateFormat;
-					dateFormat = new SimpleDateFormat(txtData.getText(6, 4)+txtData.getText(3, 2)+txtData.getText(0, 2));
-					dateFormat.format(data);
-				} catch (BadLocationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				 */
-
+				
 				try {
 					SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 					java.util.Date dataUtil = df.parse(txtData.getText());
@@ -165,19 +140,25 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}			
-
+				}
+				
+				serv.setVeiculo((Veiculo) comboBoxVeiculo.getSelectedItem());
+				serv.setFornecedor((Fornecedor) comboBoxFornecedor.getSelectedItem());
+				serv.setMotorista((Motorista) comboBoxMotorista.getSelectedItem());
+				serv.setTipoServico((TipoServico)comboBoxTipoServico.getSelectedItem());				
+				serv.setUsuario(user);
 				serv.setNroOrcamento(txtOrcamento.getText());
 				serv.setNfTicket(Integer.parseInt(txtNF.getText()));
 				serv.setDescricao(txtDescricao.getText());
 				serv.setKm(Integer.parseInt(txtKM.getText()));				
-				serv.setValor(Double.parseDouble(txtValor.getText()));				
+				serv.setValor(Double.parseDouble(txtValor.getText()));
+				serv.setIdservico(servicoEdicao.getIdservico());
 
 				retorno = mbServico.validarServico(serv);
 
 				if (retorno == "ok"){
-					mbServico.inserir(serv);
-					JOptionPane.showMessageDialog(null, "Serviço cadastrado com sucesso");
+					mbServico.editar(serv);
+					JOptionPane.showMessageDialog(null, "Serviço alterado com sucesso");
 					voltarTelaListagem();
 				}
 				else{
@@ -308,12 +289,19 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 	}
 
 	public void listarVeiculos(){
+			
 		VeiculoMB mbVeiculo = VeiculoMB.getInstance();		
 		List<Veiculo> veiculos;
-		try {
+		DefaultComboBoxModel comboModel = (DefaultComboBoxModel) comboBoxVeiculo.getModel();
+        comboModel.removeAllElements();
+        
+        try {
 			veiculos = mbVeiculo.finbByAll();
 			for (int i=0;i<veiculos.size();i++){
-				comboBoxVeiculo.addItem(veiculos.get(i).getPlaca());			
+				comboModel.addElement(veiculos.get(i));
+				if (veiculos.get(i) == servicoEdicao.getVeiculo()){
+					 comboModel.setSelectedItem(veiculos.get(i));
+				}
 			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -324,15 +312,23 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+       
+        
 	}
 
 	public void listarFornecedores(){
 		FornecedorMB mbFornecedor = FornecedorMB.getInstance();		
 		List<Fornecedor> fornecedores;
+		DefaultComboBoxModel comboModel = (DefaultComboBoxModel) comboBoxFornecedor.getModel();
+        comboModel.removeAllElements();
+        
 		try {
 			fornecedores = mbFornecedor.finbByAll();
 			for (int i=0;i<fornecedores.size();i++){
-				comboBoxFornecedor.addItem(fornecedores.get(i).getNome());			
+				comboModel.addElement(fornecedores.get(i));
+				if (fornecedores.get(i) == servicoEdicao.getFornecedor()){
+					 comboModel.setSelectedItem(fornecedores.get(i));
+				}
 			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -343,15 +339,21 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		comboBoxFornecedor.setSelectedItem(servicoEdicao);
 	}
 
 	public void listarMotoristas(){
 		MotoristaMB mbMotorista = MotoristaMB.getInstance();		
 		List<Motorista> motoristas;
+		DefaultComboBoxModel comboModel = (DefaultComboBoxModel) comboBoxMotorista.getModel();
+        comboModel.removeAllElements();
 		try {
 			motoristas = mbMotorista.finbByAll();
 			for (int i=0;i<motoristas.size();i++){
-				comboBoxMotorista.addItem(motoristas.get(i).getNome());			
+				comboModel.addElement(motoristas.get(i));
+				if (motoristas.get(i) == servicoEdicao.getMotorista()){
+					 comboModel.setSelectedItem(motoristas.get(i));
+				}
 			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -362,15 +364,22 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		comboBoxMotorista.setSelectedItem(servicoEdicao);
 	}
 
 	public void listarTiposServico(){
 		TipoServicoMB mbTipoServico = TipoServicoMB.getInstance();		
 		List<TipoServico> tiposServico;
+		DefaultComboBoxModel comboModel = (DefaultComboBoxModel) comboBoxTipoServico.getModel();
+        comboModel.removeAllElements();
+
 		try {
 			tiposServico = mbTipoServico.finbByAll();
 			for (int i=0;i<tiposServico.size();i++){
-				comboBoxTipoServico.addItem(tiposServico.get(i).getNome());			
+				comboModel.addElement(tiposServico.get(i));
+				if (tiposServico.get(i) == servicoEdicao.getTipoServico()){
+					 comboModel.setSelectedItem(tiposServico.get(i));
+				}
 			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -381,13 +390,15 @@ public class TelaCadastroServicoEfetuado2 extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		comboBoxTipoServico.setSelectedItem(servicoEdicao);
 	}
+	
 	public void voltarTelaListagem(){
 		TelaPrincipal parent = (TelaPrincipal)getParent().getParent().getParent().getParent();
 		parent.getContentPane().removeAll();
-		parent.getContentPane().add(new TelaListaServicosPendentes());
+		parent.getContentPane().add(new TelaListaServicosEfetuados());
 		parent.getContentPane().validate();   
 		parent.getContentPane().repaint();
 	}
-
+	
 }

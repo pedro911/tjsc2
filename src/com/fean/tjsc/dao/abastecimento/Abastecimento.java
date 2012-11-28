@@ -22,6 +22,12 @@ import com.fean.tjsc.dao.veiculo.Veiculo;
  */
 @Entity
 @Table(name = "abastecimento", catalog = "tjsc")
+@javax.persistence.NamedQueries({
+    @javax.persistence.NamedQuery(
+		name="Abastecimento.UltimoAbastecimento",
+		query="SELECT a FROM Abastecimento a WHERE a.veiculo = :veiculo and data2 = (select min(a.data2) from Abastecimento a  WHERE a.veiculo = :veiculo))"
+    )
+})
 public class Abastecimento implements java.io.Serializable {
 
 	// Fields

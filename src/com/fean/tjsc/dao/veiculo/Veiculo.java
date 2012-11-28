@@ -191,5 +191,10 @@ public class Veiculo implements java.io.Serializable {
 			Set<TipoServicoVeiculo> tipoServicoVeiculos) {
 		this.tipoServicoVeiculos = tipoServicoVeiculos;
 	}
+	
+	@Override	
+	public String toString() {
+	        return this.placa;
+	}
 
 }

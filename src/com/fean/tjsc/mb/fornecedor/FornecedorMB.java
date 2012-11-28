@@ -72,15 +72,7 @@ public class FornecedorMB {
 	public List<Fornecedor> finbByAll() throws ClassNotFoundException, SQLException{
 		FornecedorDAO fornecedorDAO = FornecedorDAO.getInstance();
 		return fornecedorDAO.findAll();
-	}
-	
-	public Integer retornarIdFornecedor(String nome){
-		Integer id = 0;
-		FornecedorDAO fornecedorDAO = FornecedorDAO.getInstance();
-		List<Fornecedor> rs = fornecedorDAO.findByNome(nome);
-		id = rs.get(0).getIdfornecedor();		
-		return id;
-	}
+	}	
 	
 }
 

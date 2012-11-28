@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.fean.tjsc.dao.utils.EntityManagerHelper;
+import com.fean.tjsc.dao.veiculo.Veiculo;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -199,6 +200,21 @@ public class AbastecimentoDAO implements IAbastecimentoDAO {
 			return query.getResultList();
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("find all failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	public  Abastecimento findMinAbastecimento(Veiculo veiculo) {
+		
+		Abastecimento Abastecimento =null;
+		try {
+			Query query = getEntityManager().createNamedQuery("Abastecimento.UltimoAbastecimento");
+			query.setParameter("veiculo", veiculo);
+			if(query.getSingleResult() != null){
+				Abastecimento = (Abastecimento) query.getSingleResult();
+			}
+			return Abastecimento;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("find failed", Level.SEVERE, re);
 			throw re;
 		}
 	}

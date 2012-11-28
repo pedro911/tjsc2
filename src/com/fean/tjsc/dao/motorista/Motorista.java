@@ -114,5 +114,10 @@ public class Motorista implements java.io.Serializable {
 	public void setVeiculos(Set<Veiculo> veiculos) {
 		this.veiculos = veiculos;
 	}
+	
+	@Override	
+	public String toString() {
+	        return this.nome;
+	}
 
 }

@@ -20,6 +20,7 @@ import com.fean.tjsc.dao.fornecedor.Fornecedor;
 import com.fean.tjsc.dao.motorista.Motorista;
 import com.fean.tjsc.dao.tiposervico.TipoServico;
 import com.fean.tjsc.dao.usuario.Usuario;
+
 import com.fean.tjsc.dao.veiculo.Veiculo;
 
 /**
@@ -27,6 +28,12 @@ import com.fean.tjsc.dao.veiculo.Veiculo;
  */
 @Entity
 @Table(name = "servico", catalog = "tjsc")
+@javax.persistence.NamedQueries({
+    @javax.persistence.NamedQuery(
+		name="Servico.UltimoServico",
+		query="SELECT s FROM Servico s WHERE s.veiculo = :veiculo and data2 = (select max(s.data2) from Servico s  WHERE s.veiculo = :veiculo))"
+    )
+})
 public class Servico implements java.io.Serializable {
 
 	// Fields

@@ -16,12 +16,14 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
+import com.fean.tjsc.dao.usuario.Usuario;
 import com.fean.tjsc.visual.servico.TelaCadastroServicoEfetuado;
-import com.fean.tjsc.visual.servico.TelaCadastroServicoEfetuado2;
-import com.fean.tjsc.visual.servico.TelaListaServicosPendentes;
+import com.fean.tjsc.visual.servico.TelaCadastroServicoEfetuado;
+import com.fean.tjsc.visual.servico.TelaListaServicosEfetuados;
 import com.fean.tjsc.visual.usuario.TelaCadastroUsuario;
 import com.fean.tjsc.visual.usuario.TelaListaUsuario;
 import com.fean.tjsc.visual.veiculo.TelaCadastroVeiculo;
+import com.fean.tjsc.visual.veiculo.TelaStatusVeiculos;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -37,7 +39,7 @@ import java.text.ParseException;
 public class TelaPrincipal extends JFrame {
 
 	private JPanel contentPane;
-	public static boolean adm = true;
+	public static Usuario user = new Usuario();
 	public static String usuario;
 	private final Action action = new SwingAction();
 	private final Action action_1 = new SwingAction_1();
@@ -93,6 +95,39 @@ public class TelaPrincipal extends JFrame {
 		JMenuItem mntmSair = new JMenuItem("Sair");
 		mnIncio.add(mntmSair);
 		
+		JMenu mnRelatrios = new JMenu("Relat\u00F3rios");
+		menuBar.add(mnRelatrios);
+		
+		JMenu mnServios_1 = new JMenu("Servi\u00E7os");
+		mnRelatrios.add(mnServios_1);
+		
+		JMenuItem mntmPendentes_1 = new JMenuItem("Pendentes");
+		mnServios_1.add(mntmPendentes_1);
+		
+		JMenuItem mntmEfetuados = new JMenuItem("Efetuados");
+		mnServios_1.add(mntmEfetuados);
+		
+		JMenuItem mntmPorVeculo_2 = new JMenuItem("Por Ve\u00EDculo");
+		mnServios_1.add(mntmPorVeculo_2);
+		
+		JMenuItem mntmNumPerodo = new JMenuItem("Num Per\u00EDodo");
+		mnServios_1.add(mntmNumPerodo);
+		
+		JMenuItem mntmVeculos = new JMenuItem("Ve\u00EDculos");
+		mnRelatrios.add(mntmVeculos);
+		
+		JMenuItem mntmMotoristas = new JMenuItem("Motoristas");
+		mnRelatrios.add(mntmMotoristas);
+		
+		JMenuItem mntmFornecedores = new JMenuItem("Fornecedores");
+		mnRelatrios.add(mntmFornecedores);
+		
+		JMenuItem mntmUnidades = new JMenuItem("Unidades");
+		mnRelatrios.add(mntmUnidades);
+		
+		JMenuItem mntmUsurios = new JMenuItem("Usu\u00E1rios");
+		mnRelatrios.add(mntmUsurios);
+		
 		JMenu mnServios = new JMenu("Servi\u00E7os");
 		menuBar.add(mnServios);
 		
@@ -106,11 +141,14 @@ public class TelaPrincipal extends JFrame {
 		JMenuItem mntmPendentes = new JMenuItem("Todos os Pendentes");
 		mnNewMenu.add(mntmPendentes);
 		
+		JMenuItem mntmPorPerodo = new JMenuItem("Por per\u00EDodo");
+		mnNewMenu.add(mntmPorPerodo);
+		
 		JMenuItem mntmPorVeculo = new JMenuItem("Por ve\u00EDculo");
 		mnNewMenu.add(mntmPorVeculo);
 		
-		JMenuItem mntmPorComarca = new JMenuItem("Por comarca");
-		mnNewMenu.add(mntmPorComarca);
+		JMenuItem mntmPorUnidade2 = new JMenuItem("Por unidade");
+		mnNewMenu.add(mntmPorUnidade2);
 		
 		JMenu mnVeculos = new JMenu("Ve\u00EDculos");
 		menuBar.add(mnVeculos);
@@ -119,15 +157,92 @@ public class TelaPrincipal extends JFrame {
 		mntmListar_1.setAction(action_3);
 		mnVeculos.add(mntmListar_1);
 		
+		JMenuItem mntmEditar_2 = new JMenuItem("Editar");
+		mnVeculos.add(mntmEditar_2);
+		
+		JMenuItem mntmRemover_2 = new JMenuItem("Remover");
+		mnVeculos.add(mntmRemover_2);
+		
+		JMenu mnListar = new JMenu("Listar");
+		mnVeculos.add(mnListar);
+		
+		JMenuItem mntmComServiosPendentes = new JMenuItem("Com servi\u00E7os pendentes");
+		mnListar.add(mntmComServiosPendentes);
+		
+		JMenuItem mntmPorUnidade = new JMenuItem("Por Unidade");
+		mnListar.add(mntmPorUnidade);
+		
+		JMenuItem mntmPorSituao = new JMenuItem("Por Situa\u00E7\u00E3o");
+		mnListar.add(mntmPorSituao);
+		
+		JMenu mnTiposDeServios = new JMenu("Tipos de Servi\u00E7os");
+		mnVeculos.add(mnTiposDeServios);
+		
+		JMenuItem mntmListar_2 = new JMenuItem("Listar");
+		mnTiposDeServios.add(mntmListar_2);
+		
+		JMenuItem mntmCadastrar_1 = new JMenuItem("Cadastrar");
+		mnTiposDeServios.add(mntmCadastrar_1);
+		
+		JMenuItem mntmEditar_1 = new JMenuItem("Editar");
+		mnTiposDeServios.add(mntmEditar_1);
+		
+		JMenuItem mntmRemover_1 = new JMenuItem("Remover");
+		mnTiposDeServios.add(mntmRemover_1);
+		
 		JMenu mnMotorista = new JMenu("Motorista");
 		menuBar.add(mnMotorista);
 		
+		JMenuItem mntmCadastrar_2 = new JMenuItem("Cadastrar");
+		mnMotorista.add(mntmCadastrar_2);
+		
+		JMenuItem mntmEditar_3 = new JMenuItem("Editar");
+		mnMotorista.add(mntmEditar_3);
+		
+		JMenuItem mntmRemover_3 = new JMenuItem("Remover");
+		mnMotorista.add(mntmRemover_3);
+		
+		JMenu mnListar_1 = new JMenu("Listar");
+		mnMotorista.add(mnListar_1);
+		
+		JMenuItem mntmPorUnidade_1 = new JMenuItem("Por Unidade");
+		mnListar_1.add(mntmPorUnidade_1);
+		
+		JMenuItem mntmPorVeculo_1 = new JMenuItem("Por Ve\u00EDculo");
+		mnListar_1.add(mntmPorVeculo_1);
+		
+		JMenu mnFornecedores = new JMenu("Fornecedores");
+		menuBar.add(mnFornecedores);
+		
+		JMenuItem mntmCadastrar_3 = new JMenuItem("Cadastrar");
+		mnFornecedores.add(mntmCadastrar_3);
+		
+		JMenuItem mntmEditar_4 = new JMenuItem("Editar");
+		mnFornecedores.add(mntmEditar_4);
+		
+		JMenuItem mntmListar_3 = new JMenuItem("Listar");
+		mnFornecedores.add(mntmListar_3);
+		
+		JMenuItem mntmRemover_4 = new JMenuItem("Remover");
+		mnFornecedores.add(mntmRemover_4);
+		
+		JMenu mnUnidades = new JMenu("Unidades");
+		menuBar.add(mnUnidades);
+		
+		JMenuItem mntmCadastrar_4 = new JMenuItem("Cadastrar");
+		mnUnidades.add(mntmCadastrar_4);
+		
+		JMenuItem mntmEditar_5 = new JMenuItem("Editar");
+		mnUnidades.add(mntmEditar_5);
+		
+		JMenuItem mntmListar_4 = new JMenuItem("Listar");
+		mnUnidades.add(mntmListar_4);
+		
+		JMenuItem mntmRemover_5 = new JMenuItem("Remover");
+		mnUnidades.add(mntmRemover_5);
+		
 		JMenu mnUsuarios = new JMenu("Usu\u00E1rios");
 		menuBar.add(mnUsuarios);
-		
-		JMenuItem mntmListar = new JMenuItem("Listar");
-		mntmListar.setAction(action);
-		mnUsuarios.add(mntmListar);
 		
 		JMenuItem mntmCadastrar = new JMenuItem("Cadastrar");
 		mntmCadastrar.setAction(action_2);
@@ -137,15 +252,18 @@ public class TelaPrincipal extends JFrame {
 		mntmEditar.setAction(action_4);
 		mnUsuarios.add(mntmEditar);
 		
+		JMenuItem mntmListar = new JMenuItem("Listar");
+		mntmListar.setAction(action);
+		mnUsuarios.add(mntmListar);
+		
 		JMenuItem mntmRemover = new JMenuItem("Remover");
 		mntmRemover.setAction(action_5);
 		mnUsuarios.add(mntmRemover);
 		contentPane = new JPanel();
 		
-		trocaTela(new TelaListaServicosPendentes());
-		//contentPane = new TelaListaServicosPendentes();
+		trocaTela(new TelaStatusVeiculos());
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		//contentPane.setMaximumSize(getContentPane().getMaximumSize());
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout());
 		setLocationRelativeTo(null);
@@ -163,7 +281,7 @@ public class TelaPrincipal extends JFrame {
 			putValue(SHORT_DESCRIPTION, "Listar usuarios");
 		}
 		public void actionPerformed(ActionEvent e) {
-			if(adm == true){
+			if(user.getAdministrador() == true){
 				trocaTela(new TelaListaUsuario());
 			}
 			else {
@@ -177,7 +295,7 @@ public class TelaPrincipal extends JFrame {
 			putValue(SHORT_DESCRIPTION, "Lista serviços pendentes");
 		}
 		public void actionPerformed(ActionEvent e) {
-			trocaTela(new TelaListaServicosPendentes());
+			trocaTela(new TelaListaServicosEfetuados());
 		}
 	}
 	private class SwingAction_2 extends AbstractAction {
@@ -187,7 +305,7 @@ public class TelaPrincipal extends JFrame {
 		}
 		public void actionPerformed(ActionEvent e) {
 			
-			if(adm == true){
+			if(user.getAdministrador() == true){
 				trocaTela(new TelaCadastroUsuario());
 			}
 			else {
@@ -211,7 +329,7 @@ public class TelaPrincipal extends JFrame {
 			putValue(SHORT_DESCRIPTION, "Editar Usuários");
 		}
 		public void actionPerformed(ActionEvent e) {
-			if(adm == true){
+			if(user.getAdministrador() == true){
 				trocaTela(new TelaListaUsuario());
 				JOptionPane.showMessageDialog(null, "Selecione um usário abaixo e clique em editar");				
 			}
@@ -226,7 +344,7 @@ public class TelaPrincipal extends JFrame {
 			putValue(SHORT_DESCRIPTION, "Abre lista de usuários para selecionar e remover");
 		}
 		public void actionPerformed(ActionEvent e) {
-			if(adm == true){
+			if(user.getAdministrador() == true){
 				trocaTela(new TelaListaUsuario());
 				JOptionPane.showMessageDialog(null, "Selecione um usuário abaixo e clique em remover");				
 			}
@@ -242,9 +360,10 @@ public class TelaPrincipal extends JFrame {
 		}
 		public void actionPerformed(ActionEvent e) {
 			
-			if(adm == true){
+			if(user.getAdministrador() == true){
 				try {
-					trocaTela(new TelaCadastroServicoEfetuado2());
+					trocaTela(new TelaCadastroServicoEfetuado());
+					TelaCadastroServicoEfetuado.user = user;
 				} catch (ParseException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -254,5 +373,6 @@ public class TelaPrincipal extends JFrame {
 				JOptionPane.showMessageDialog(null, "Você não tem permissão para acessar este menu");
 			}
 		}
-	}
+	}		
+	
 }

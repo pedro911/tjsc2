@@ -84,24 +84,18 @@ public class Login extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				
 				UsuarioMB usuarioMB = UsuarioMB.getInstance();
-				
 				boolean resultado = usuarioMB.validarUsuarioLogin(txtUsuario.getText(), String.valueOf(txtSenha.getPassword()));
-				
-				JOptionPane.showMessageDialog(null, resultado);
-				
+							
 				if (resultado == true){
-					JOptionPane.showMessageDialog(null, "Logado");
-					boolean adm = usuarioMB.verificaUsuarioAdministrador(txtUsuario.getText());
-					JOptionPane.showMessageDialog(null, "é adm: " + adm);
-					TelaPrincipal.adm = adm;
-					TelaPrincipal.usuario = txtUsuario.getText();
+					//boolean adm = usuarioMB.verificaUsuarioAdministrador(txtUsuario.getText());
+					TelaPrincipal.user = usuarioMB.findById(txtUsuario.getText());					
 					//aqui abrir tela principal
 					TelaPrincipal p1 = new TelaPrincipal();
 					setVisible(false);
 					p1.setVisible(true);
 				}
 				else{
-					JOptionPane.showMessageDialog(null, "Usuário e/ou senha inválidos, tente novamente!");
+					JOptionPane.showMessageDialog(null, "Usuário e/ou senha inválido(s), tente novamente!");
 				}
 			}
 		});

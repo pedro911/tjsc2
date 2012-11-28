@@ -76,13 +76,6 @@ public class TipoServicoMB {
 		return tiposervicoDAO.findAll();
 	}
 	
-	public Integer retornarIdTipoServico(String nome){
-		Integer id = 0;
-		TipoServicoDAO tiposervicoDAO = TipoServicoDAO.getInstance();
-		List<TipoServico> rs = tiposervicoDAO.findByNome(nome);
-		id = rs.get(0).getIdtipoServico();		
-		return id;
-	}
 }
 
 
