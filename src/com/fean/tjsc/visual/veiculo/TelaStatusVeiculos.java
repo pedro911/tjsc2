@@ -145,13 +145,13 @@ public class TelaStatusVeiculos extends JPanel {
 			for (int i=0;i<listaVeiculos.size();i++){
 				//String status = veiculoMB.statusVeiculo(listaVeiculos.get(i));
 				s1 = servicoMB.findMaxServico(listaVeiculos.get(i));
-				JOptionPane.showMessageDialog(null, s1.getIdservico());
+				//JOptionPane.showMessageDialog(null, s1.getIdservico());
 				((DefaultTableModel)table.getModel()).addRow(new String[] {
 						listaVeiculos.get(i).getModelo().getNome(),
 						listaVeiculos.get(i).getPlaca(),
-						"",
-						//status,
-						listaVeiculos.get(i).getIdveiculo()+""
+						s1.getVeiculo().getIdveiculo()+"",
+						s1.getTipoServico().getNome(),
+						s1.getIdservico()+""
 				});
 			}
 		} catch (ClassNotFoundException e) {

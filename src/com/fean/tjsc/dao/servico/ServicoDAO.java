@@ -214,6 +214,7 @@ public class ServicoDAO implements IServicoDAO {
 			throw re;
 		}
 	}
+	
 	public  Servico findMaxServico(Veiculo veiculo) {
 		
 		Servico servico =null;

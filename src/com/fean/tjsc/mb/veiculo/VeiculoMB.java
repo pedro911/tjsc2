@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -89,19 +91,15 @@ public class VeiculoMB {
 	public String statusVeiculo (Veiculo veiculo){
 		String retorno = "";
 		ServicoDAO servicoDAO = ServicoDAO.getInstance();
+		AbastecimentoDAO abastecimentoDAO = AbastecimentoDAO.getInstance();
 		//TipoServicoDAO tipoServicoDAO = TipoServicoDAO.getInstance();
 		TipoServicoModeloDAO tipoServicoModeloDAO = TipoServicoModeloDAO.getInstance();
 		//long dataHoje = new java.util.Date().getTime();				
 		List<Servico> listaServicos = servicoDAO.findAll();
-		List<Servico> listaServicosVeiculo = null;
-
+		
 		for (int i=0;i<listaServicos.size();i++){
 			// se o veiculo possui servico efetuado entra aqui			
 			
-			while (listaServicos.get(i).equals(veiculo)){
-				listaServicosVeiculo.add(listaServicos.get(i));
-				JOptionPane.showMessageDialog(null, listaServicosVeiculo.get(i).getVeiculo().getPlaca());
-			}
 			
 			int posicaoUltimoServico = listaServicosVeiculo.lastIndexOf(veiculo);
 			TipoServicoModeloId tsm = new TipoServicoModeloId();
@@ -110,7 +108,10 @@ public class VeiculoMB {
 			int kmUltimoServico = listaServicosVeiculo.get(posicaoUltimoServico).getKm();
 			TipoServicoModelo temp = tipoServicoModeloDAO.findById(tsm);
 			int kmProximoServico = temp.getKm();
-			int percentualAviso = 20;
+			double percentualAviso = 0.8;
+			java.util.Date dataHoje = new java.util.Date(System.currentTimeMillis());
+			SimpleDateFormat formatarDate = new SimpleDateFormat("yyyy-MM-dd");   
+			System.out.print(formatarDate.format(dataHoje));  
 
 			if ( (veiculo.getOdometro() > ( kmUltimoServico + (kmProximoServico * percentualAviso/100))) ){
 				// testar para ver se é amarelo ou vermelho
@@ -124,6 +125,29 @@ public class VeiculoMB {
 			else {
 				retorno = "verde";
 			}
+			
+			// se nao possui nenhum servico, compara com a soma da km dos abastecimentos
+			Abastecimento abastecimentoMin = new Abastecimento();
+			abastecimentoMin = abastecimentoDAO.findMinAbastecimento(veiculo);
+			java.util.Date dataAmarelo = new java.util.Date();
+			java.util.Date dataVermelho = new java.util.Date();
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.MONTH, 1);
+			
+			if ( veiculo.getOdometro() > ( abastecimentoMin.getKmOdometro() + (kmProximoServico * percentualAviso))
+					|| dataHoje.after(abastecimentoMin.getData2()) ) {
+				if (veiculo.getOdometro() < ( abastecimentoMin.getKmOdometro() + kmProximoServico)
+					|| dataHoje.after(abastecimentoMin.getData2())){
+					retorno = "amarelo";
+				}
+				else {
+					retorno = "vermelho";
+				}				
+			}
+			else {
+				retorno = "verde";
+			}
+			
 		}
 		return retorno;
 	}

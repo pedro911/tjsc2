@@ -13,6 +13,7 @@ import com.fean.tjsc.dao.fornecedor.Fornecedor;
 import com.fean.tjsc.dao.fornecedor.FornecedorDAO;
 import com.fean.tjsc.dao.tiposervico.TipoServico;
 import com.fean.tjsc.dao.tiposervico.TipoServicoDAO;
+import com.fean.tjsc.dao.veiculo.Veiculo;
 
 
 
@@ -75,6 +76,12 @@ public class TipoServicoMB {
 		TipoServicoDAO tiposervicoDAO = TipoServicoDAO.getInstance();
 		return tiposervicoDAO.findAll();
 	}
+	
+	public List<TipoServico> findByVeiculo(Veiculo veiculo) throws ClassNotFoundException, SQLException{
+		TipoServicoDAO tiposervicoDAO = TipoServicoDAO.getInstance();
+		return tiposervicoDAO.findByNome(veiculo);
+	}
+	
 	
 }
 
