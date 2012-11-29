@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.fean.tjsc.dao.tiposervico.TipoServico;
 import com.fean.tjsc.dao.utils.EntityManagerHelper;
 import com.fean.tjsc.dao.veiculo.Veiculo;
 
@@ -203,12 +204,14 @@ public class AbastecimentoDAO implements IAbastecimentoDAO {
 			throw re;
 		}
 	}
-	public  Abastecimento findMinAbastecimento(Veiculo veiculo) {
+	public  Abastecimento findMinAbastecimento(Veiculo veiculo, TipoServico tipoServico) {
 		
 		Abastecimento Abastecimento =null;
 		try {
 			Query query = getEntityManager().createNamedQuery("Abastecimento.UltimoAbastecimento");
 			query.setParameter("veiculo", veiculo);
+			query.setParameter("tipoServico", tipoServico);
+			
 			if(query.getSingleResult() != null){
 				Abastecimento = (Abastecimento) query.getSingleResult();
 			}

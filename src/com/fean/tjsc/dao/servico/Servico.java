@@ -31,7 +31,7 @@ import com.fean.tjsc.dao.veiculo.Veiculo;
 @javax.persistence.NamedQueries({
     @javax.persistence.NamedQuery(
 		name="Servico.UltimoServico",
-		query="SELECT s FROM Servico s WHERE s.veiculo = :veiculo and data2 = (select max(s.data2) from Servico s  WHERE s.veiculo = :veiculo))"
+		query="SELECT s FROM Servico s WHERE s.veiculo = :veiculo and s.tipoServico:tipoServico and data2 = (select max(s.data2) from Servico s  WHERE s.veiculo = :veiculo and s.tipoServico:tipoServico))"
     )
 })
 public class Servico implements java.io.Serializable {

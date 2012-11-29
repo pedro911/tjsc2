@@ -11,6 +11,7 @@ import com.fean.tjsc.dao.abastecimento.Abastecimento;
 import com.fean.tjsc.dao.abastecimento.AbastecimentoDAO;
 import com.fean.tjsc.dao.servico.Servico;
 import com.fean.tjsc.dao.servico.ServicoDAO;
+import com.fean.tjsc.dao.tiposervico.TipoServico;
 import com.fean.tjsc.dao.veiculo.Veiculo;
 
 
@@ -79,9 +80,9 @@ public class ServicoMB {
 		ServicoDAO servicoDAO = ServicoDAO.getInstance();
 		return servicoDAO.findById(id);
 	}
-	public Servico findMaxServico(Veiculo veiculo) throws ClassNotFoundException, SQLException{
+	public Servico findUltimoServico(Veiculo veiculo, TipoServico tiposervico) throws ClassNotFoundException, SQLException{
 		ServicoDAO servicoDAO = ServicoDAO.getInstance();
-		return servicoDAO.findMaxServico(veiculo);
+		return servicoDAO.findUltimoServico(veiculo,tiposervico);
 	}
 	
 	public String validarServico(Servico servico){

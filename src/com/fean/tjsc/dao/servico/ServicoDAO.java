@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.fean.tjsc.dao.tiposervico.TipoServico;
 import com.fean.tjsc.dao.utils.EntityManagerHelper;
 import com.fean.tjsc.dao.veiculo.Veiculo;
 
@@ -215,12 +216,13 @@ public class ServicoDAO implements IServicoDAO {
 		}
 	}
 	
-	public  Servico findMaxServico(Veiculo veiculo) {
+	public  Servico findUltimoServico(Veiculo veiculo, TipoServico tipoServico) {
 		
 		Servico servico =null;
 		try {
 			Query query = getEntityManager().createNamedQuery("Servico.UltimoServico");
 			query.setParameter("veiculo", veiculo);
+			query.setParameter("tipoServico", tipoServico);
 			if(query.getSingleResult() != null){
 				servico = (Servico) query.getSingleResult();
 			}
