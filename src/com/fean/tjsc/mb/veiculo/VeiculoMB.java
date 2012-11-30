@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -87,6 +88,7 @@ public class VeiculoMB {
 		VeiculoDAO veiculoDAO = VeiculoDAO.getInstance();
 		return veiculoDAO.findAll();
 	}
+	/*
 
 	public String statusVeiculo (Veiculo veiculo){
 		String retorno = "";
@@ -126,7 +128,7 @@ public class VeiculoMB {
 				retorno = "verde";
 			}
 			
-			// se nao possui nenhum servico, compara com a soma da km dos abastecimentos
+			// se nao possui nenhum servico, compara com: km do ultimo abastecimento + km tipo do servico para ver se passou
 			Abastecimento abastecimentoMin = new Abastecimento();
 			abastecimentoMin = abastecimentoDAO.findMinAbastecimento(veiculo);
 			java.util.Date dataAmarelo = new java.util.Date();
@@ -149,6 +151,55 @@ public class VeiculoMB {
 			}
 			
 		}
+		return retorno;
+	}
+	*/
+	
+	public String statusVeiculo (Veiculo veiculo){
+		String retorno = "";
+		TipoServicoModeloDAO tiposervicomodeloDAO = TipoServicoModeloDAO.getInstance();
+		ServicoDAO servicoDAO = ServicoDAO.getInstance();
+		//AbastecimentoDAO abastecimentoDAO = AbastecimentoDAO.getInstance();
+		/*		
+		TipoServicoModeloId tsm = new TipoServicoModeloId();
+		tsm.setModeloIdmodelo(veiculo.getModelo().getIdmodelo());
+		JOptionPane.showMessageDialog(null, tsm.getModeloIdmodelo());	
+		*/			
+		List<TipoServicoModelo> tiposServicosModeloVeiculo = (List<TipoServicoModelo>) tiposervicomodeloDAO.findTipoServicoByModelo(veiculo.getModelo());
+		
+		for (int i=0;i<tiposServicosModeloVeiculo.size();i++){
+			JOptionPane.showMessageDialog(null,					
+					"ID veículo: " + veiculo.getIdveiculo() + " " +
+					"\nid tipo serviço: " + tiposServicosModeloVeiculo.get(i).getTipoServico().getIdtipoServico() + " " +
+					"\nnome tipo servico: " + tiposServicosModeloVeiculo.get(i).getTipoServico().getNome());
+		}
+		
+		for (int i=0;i<tiposServicosModeloVeiculo.size();i++){
+			// para cada tipo de servico busca o ultimo servico feito
+			// terminar o teste para cada servico quando != null
+			
+			Servico ultimoServico = servicoDAO.findUltimoServico(veiculo, tiposServicosModeloVeiculo.get(i).getTipoServico());
+			retorno = "shit!";
+			// se nao encontrar nenhum, vai comparar o ultimo abastecimento + km proximo servico com a km inicial cadastrada
+			if (ultimoServico == null){
+				//Abastecimento ultimoAbastecimento = abastecimentoDAO.findUltimoAbastecimento(veiculo);
+				JOptionPane.showMessageDialog(null, "km cadastro: " + veiculo.getKmCadastro() +
+						"\nodometro veiculo: " + veiculo.getOdometro() +
+						"\ntipo servico:" + tiposServicosModeloVeiculo.get(i).getKm());
+				if( veiculo.getOdometro() > ( veiculo.getKmCadastro()  + (tiposServicosModeloVeiculo.get(i).getKm()*0.8) ) ){
+					if( veiculo.getOdometro() < (veiculo.getKmCadastro() + tiposServicosModeloVeiculo.get(i).getKm() ) ){
+						retorno = "amarelo";
+					}
+					else{
+						retorno = "vermelho";
+					}
+				}
+				else{
+					retorno = "verde";
+				}
+			}
+		}
+		
 		return retorno;
 	}
 

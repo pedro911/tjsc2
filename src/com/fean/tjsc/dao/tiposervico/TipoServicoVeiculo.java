@@ -25,7 +25,7 @@ public class TipoServicoVeiculo implements java.io.Serializable {
 	private TipoServicoVeiculoId id;
 	private Veiculo veiculo;
 	private TipoServico tipoServico;
-	private Boolean situacao;
+	private String situacao;
 
 	// Constructors
 
@@ -43,7 +43,7 @@ public class TipoServicoVeiculo implements java.io.Serializable {
 
 	/** full constructor */
 	public TipoServicoVeiculo(TipoServicoVeiculoId id, Veiculo veiculo,
-			TipoServico tipoServico, Boolean situacao) {
+			TipoServico tipoServico, String situacao) {
 		this.id = id;
 		this.veiculo = veiculo;
 		this.tipoServico = tipoServico;
@@ -84,11 +84,11 @@ public class TipoServicoVeiculo implements java.io.Serializable {
 	}
 
 	@Column(name = "situacao")
-	public Boolean getSituacao() {
+	public String getSituacao() {
 		return this.situacao;
 	}
 
-	public void setSituacao(Boolean situacao) {
+	public void setSituacao(String situacao) {
 		this.situacao = situacao;
 	}
 

@@ -40,7 +40,8 @@ public class Veiculo implements java.io.Serializable {
 	private String revavan;
 	private String chassi;
 	private Integer odometro;
-	private Boolean situacao;
+	private Integer kmCadastro;
+	private String situacao;
 	private Set<Abastecimento> abastecimentos = new HashSet<Abastecimento>(0);
 	private Set<Servico> servicos = new HashSet<Servico>(0);
 	private Set<TipoServicoVeiculo> tipoServicoVeiculos = new HashSet<TipoServicoVeiculo>(
@@ -62,7 +63,7 @@ public class Veiculo implements java.io.Serializable {
 	/** full constructor */
 	public Veiculo(Modelo modelo, Motorista motorista, Unidade unidade,
 			String placa, String revavan, String chassi, Integer odometro,
-			Boolean situacao, Set<Abastecimento> abastecimentos,
+			String situacao, Integer kmCadastro, Set<Abastecimento> abastecimentos,
 			Set<Servico> servicos, Set<TipoServicoVeiculo> tipoServicoVeiculos) {
 		this.modelo = modelo;
 		this.motorista = motorista;
@@ -72,6 +73,7 @@ public class Veiculo implements java.io.Serializable {
 		this.chassi = chassi;
 		this.odometro = odometro;
 		this.situacao = situacao;
+		this.kmCadastro = kmCadastro;
 		this.abastecimentos = abastecimentos;
 		this.servicos = servicos;
 		this.tipoServicoVeiculos = tipoServicoVeiculos;
@@ -154,13 +156,22 @@ public class Veiculo implements java.io.Serializable {
 	public void setOdometro(Integer odometro) {
 		this.odometro = odometro;
 	}
+	
+	@Column(name = "km_cadastro")
+	public Integer getKmCadastro() {
+		return this.kmCadastro;
+	}
+
+	public void setKmCadastro(Integer kmCadastro) {
+		this.kmCadastro = kmCadastro;
+	}
 
 	@Column(name = "situacao")
-	public Boolean getSituacao() {
+	public String getSituacao() {
 		return this.situacao;
 	}
 
-	public void setSituacao(Boolean situacao) {
+	public void setSituacao(String situacao) {
 		this.situacao = situacao;
 	}
 

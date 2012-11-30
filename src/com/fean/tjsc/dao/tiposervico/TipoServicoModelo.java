@@ -18,6 +18,12 @@ import com.fean.tjsc.dao.modelo.Modelo;
  */
 @Entity
 @Table(name = "tipo_servico_modelo", catalog = "tjsc")
+@javax.persistence.NamedQueries({
+    @javax.persistence.NamedQuery(
+		name="TipoServicoModelo.findByIdModelo",
+		query="SELECT tsm FROM TipoServicoModelo tsm WHERE tsm.modelo = :modelo)"
+    )
+})
 public class TipoServicoModelo implements java.io.Serializable {
 
 	// Fields

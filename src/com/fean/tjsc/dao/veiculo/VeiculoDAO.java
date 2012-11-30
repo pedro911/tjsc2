@@ -28,6 +28,7 @@ public class VeiculoDAO implements IVeiculoDAO {
 	public static final String CHASSI = "chassi";
 	public static final String ODOMETRO = "odometro";
 	public static final String SITUACAO = "situacao";
+	public static final String KMCADASTRO = "kmcadastro";
 	
 	private static VeiculoDAO instance = new VeiculoDAO();
 	private VeiculoDAO(){}
@@ -193,6 +194,10 @@ public class VeiculoDAO implements IVeiculoDAO {
 
 	public List<Veiculo> findBySituacao(Object situacao) {
 		return findByProperty(SITUACAO, situacao);
+	}
+	
+	public List<Veiculo> findByKmCadastro(Object kmcadastro) {
+		return findByProperty(KMCADASTRO, kmcadastro);
 	}
 
 	/**

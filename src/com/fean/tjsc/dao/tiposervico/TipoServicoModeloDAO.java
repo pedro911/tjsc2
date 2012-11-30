@@ -7,7 +7,10 @@ import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.fean.tjsc.dao.abastecimento.Abastecimento;
+import com.fean.tjsc.dao.modelo.Modelo;
 import com.fean.tjsc.dao.utils.EntityManagerHelper;
+import com.fean.tjsc.dao.veiculo.Veiculo;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -201,6 +204,20 @@ public class TipoServicoModeloDAO implements ITipoServicoModeloDAO {
 			return query.getResultList();
 		} catch (RuntimeException re) {
 			EntityManagerHelper.log("find all failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+	public List<TipoServicoModelo> findTipoServicoByModelo(Modelo modelo) {
+		List<TipoServicoModelo> tipoServicoModelo = null;
+		try {
+			Query query = getEntityManager().createNamedQuery("TipoServicoModelo.findByIdModelo");
+			query.setParameter("modelo", modelo);			
+			if(query.getResultList() != null){
+				tipoServicoModelo = (List<TipoServicoModelo>) query.getResultList();
+			}
+			return query.getResultList();
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("find failed", Level.SEVERE, re);
 			throw re;
 		}
 	}

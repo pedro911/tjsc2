@@ -75,7 +75,7 @@ public class AbastecimentoMB {
 	
 	public Abastecimento findMinAbastecimento(Veiculo veiculo) throws ClassNotFoundException, SQLException{
 		AbastecimentoDAO abastecimentoDAO = AbastecimentoDAO.getInstance();
-		return abastecimentoDAO.findMinAbastecimento(veiculo);
+		return abastecimentoDAO.findUltimoAbastecimento(veiculo);
 	}
 }
 

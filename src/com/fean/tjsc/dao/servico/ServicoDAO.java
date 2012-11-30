@@ -216,9 +216,9 @@ public class ServicoDAO implements IServicoDAO {
 		}
 	}
 	
-	public  Servico findUltimoServico(Veiculo veiculo, TipoServico tipoServico) {
+	public Servico findUltimoServico(Veiculo veiculo, TipoServico tipoServico) {
 		
-		Servico servico =null;
+		Servico servico = null;		
 		try {
 			Query query = getEntityManager().createNamedQuery("Servico.UltimoServico");
 			query.setParameter("veiculo", veiculo);
@@ -228,8 +228,9 @@ public class ServicoDAO implements IServicoDAO {
 			}
 			return servico;
 		} catch (RuntimeException re) {
-			EntityManagerHelper.log("find failed", Level.SEVERE, re);
-			throw re;
+			return null;
+			//EntityManagerHelper.log("find failed", Level.SEVERE, re);
+			//throw re;
 		}
 	}
 

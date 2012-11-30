@@ -26,11 +26,11 @@ import com.fean.tjsc.dao.veiculo.Veiculo;
 public class AbastecimentoDAO implements IAbastecimentoDAO {
 	// property constants
 	public static final String KM_ODOMETRO = "kmOdometro";
-	
+
 	private static AbastecimentoDAO instance = new AbastecimentoDAO();
 	private AbastecimentoDAO(){}
 	public static AbastecimentoDAO getInstance(){ return instance;}
-	
+
 
 	private EntityManager getEntityManager() {
 		return EntityManagerHelper.getEntityManager();
@@ -168,7 +168,7 @@ public class AbastecimentoDAO implements IAbastecimentoDAO {
 			final Object value) {
 		EntityManagerHelper.log(
 				"finding Abastecimento instance with property: " + propertyName
-						+ ", value: " + value, Level.INFO, null);
+				+ ", value: " + value, Level.INFO, null);
 		try {
 			final String queryString = "select model from Abastecimento model where model."
 					+ propertyName + "= :propertyValue";
@@ -205,13 +205,13 @@ public class AbastecimentoDAO implements IAbastecimentoDAO {
 		}
 	}
 	public  Abastecimento findMinAbastecimento(Veiculo veiculo, TipoServico tipoServico) {
-		
+
 		Abastecimento Abastecimento =null;
 		try {
-			Query query = getEntityManager().createNamedQuery("Abastecimento.UltimoAbastecimento");
+			Query query = getEntityManager().createNamedQuery("Abastecimento.MinAbastecimento");
 			query.setParameter("veiculo", veiculo);
 			query.setParameter("tipoServico", tipoServico);
-			
+
 			if(query.getSingleResult() != null){
 				Abastecimento = (Abastecimento) query.getSingleResult();
 			}
@@ -221,5 +221,21 @@ public class AbastecimentoDAO implements IAbastecimentoDAO {
 			throw re;
 		}
 	}
+	public  Abastecimento findUltimoAbastecimento(Veiculo veiculo) {
+
+		Abastecimento Abastecimento =null;
+		try {
+			Query query = getEntityManager().createNamedQuery("Abastecimento.UltimoAbastecimento");
+			query.setParameter("veiculo", veiculo);			
+			if(query.getSingleResult() != null){
+				Abastecimento = (Abastecimento) query.getSingleResult();
+			}
+			return Abastecimento;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.log("find failed", Level.SEVERE, re);
+			throw re;
+		}
+	}
+
 
 }
