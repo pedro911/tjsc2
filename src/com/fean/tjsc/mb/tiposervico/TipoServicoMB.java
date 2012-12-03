@@ -30,23 +30,23 @@ public class TipoServicoMB {
 		
 	}
 	
-	public String inserir(Abastecimento abastecimento) {
+	public String inserir(TipoServico tiposervico) {
 		
 		String retorno = "ok";
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
+		TipoServicoDAO tiposervicoDAO = TipoServicoDAO.getInstance();
 		try {
-			daoAbastecimento.save(abastecimento);
+			tiposervicoDAO.save(tiposervico);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
 		return retorno;
 	}
 	
-	public String editar(Abastecimento abastecimento) {
+	public String editar(TipoServico tiposervico) {
 		String retorno = "ok";
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
+		TipoServicoDAO tiposervicoDAO = TipoServicoDAO.getInstance();
 		try {
-			daoAbastecimento.update(abastecimento);
+			tiposervicoDAO.update(tiposervico);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
@@ -55,20 +55,20 @@ public class TipoServicoMB {
 	}
 	
 
-	public String apagar(Abastecimento abastecimento) {
+	public String apagar(TipoServico tiposervico) {
 		String retorno = "ok";
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
+		TipoServicoDAO tiposervicoDAO = TipoServicoDAO.getInstance();
 		try {
-			daoAbastecimento.delete(abastecimento);
+			tiposervicoDAO.delete(tiposervico);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
 		return retorno;
 	}
 	
-	public Abastecimento retornarAbastecimento(int id) {
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
-		return daoAbastecimento.findById(id);
+	public TipoServico retornarTipoServico(int id) {
+		TipoServicoDAO tiposervicoDAO = TipoServicoDAO.getInstance();
+		return tiposervicoDAO.findById(id);
 		
 	}
 
@@ -76,12 +76,12 @@ public class TipoServicoMB {
 		TipoServicoDAO tiposervicoDAO = TipoServicoDAO.getInstance();
 		return tiposervicoDAO.findAll();
 	}
-	
+	/*
 	public List<TipoServico> findByVeiculo(Veiculo veiculo) throws ClassNotFoundException, SQLException{
 		TipoServicoDAO tiposervicoDAO = TipoServicoDAO.getInstance();
-		return tiposervicoDAO.findByNome(veiculo);
+		return tiposervicoDAO.findByVeiculo(veiculo);
 	}
-	
+	*/
 	
 }
 

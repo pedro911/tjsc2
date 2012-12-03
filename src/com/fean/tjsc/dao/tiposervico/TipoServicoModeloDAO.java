@@ -27,6 +27,7 @@ public class TipoServicoModeloDAO implements ITipoServicoModeloDAO {
 	// property constants
 	public static final String KM = "km";
 	public static final String TEMPO = "tempo";
+	public static final String DATAPROXIMOSERVICO = "dataProximoServico";
 	
 	private static TipoServicoModeloDAO instance = new TipoServicoModeloDAO();
 	private TipoServicoModeloDAO(){}
@@ -187,6 +188,10 @@ public class TipoServicoModeloDAO implements ITipoServicoModeloDAO {
 
 	public List<TipoServicoModelo> findByTempo(Object tempo) {
 		return findByProperty(TEMPO, tempo);
+	}
+	
+	public List<TipoServicoModelo> findByDataProximoServico(Object dataProximoServico) {
+		return findByProperty(DATAPROXIMOSERVICO, dataProximoServico);
 	}
 
 	/**

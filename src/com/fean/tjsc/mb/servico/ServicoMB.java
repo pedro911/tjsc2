@@ -54,20 +54,21 @@ public class ServicoMB {
 	}
 	
 
-	public String apagar(Abastecimento abastecimento) {
+	public String apagar(Servico servico) {
 		String retorno = "ok";
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
+		ServicoDAO daoServico = ServicoDAO.getInstance();
 		try {
-			daoAbastecimento.delete(abastecimento);
+			daoServico.delete(servico);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
+		
 		return retorno;
 	}
 	
-	public Abastecimento retornarAbastecimento(int id) {
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
-		return daoAbastecimento.findById(id);
+	public Servico retornarServico(int id) {
+		ServicoDAO daoServico = ServicoDAO.getInstance();
+		return daoServico.findById(id);
 		
 	}
 
@@ -85,11 +86,29 @@ public class ServicoMB {
 		return servicoDAO.findUltimoServico(veiculo,tiposervico);
 	}
 	
+	public List<Servico> contaServicos (Veiculo veiculo, TipoServico tiposervico) {
+		ServicoDAO servicoDAO = ServicoDAO.getInstance();
+		return servicoDAO.contaServicos(veiculo, tiposervico);
+	}
+	
 	public String validarServico(Servico servico){
-		
 		String retorno = "ok";
 		
-		
+		if (servico.getNroOrcamento() == ""){
+			retorno = "Digite o número do orçamento.";
+		}
+		if (servico.getNfTicket().equals(null) || servico.getNfTicket() <= 0 ){
+			retorno = "Digite o número da Nota Fiscal do serviço.";
+		}
+		if (servico.getData2() == null){
+			retorno = "Digite a data do serviço";
+		}
+		if(servico.getValor().equals(null) || servico.getValor() <= 0){
+			retorno = "Digite o valor do serviço";
+		}
+		if (servico.getKm().equals(null) || servico.getKm() <= 0){
+			retorno = "Digite a km quando o serviço foi efetuado";
+		}		
 		
 		return retorno;
 		

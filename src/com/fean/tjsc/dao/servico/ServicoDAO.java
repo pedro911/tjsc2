@@ -30,7 +30,7 @@ public class ServicoDAO implements IServicoDAO {
 	public static final String NF_TICKET = "nfTicket";
 	public static final String DESCRICAO = "descricao";
 	public static final String KM = "km";
-	
+
 	private static ServicoDAO instance = new ServicoDAO();
 	private ServicoDAO(){}
 	public static ServicoDAO getInstance(){ return instance;}
@@ -215,9 +215,9 @@ public class ServicoDAO implements IServicoDAO {
 			throw re;
 		}
 	}
-	
+
 	public Servico findUltimoServico(Veiculo veiculo, TipoServico tipoServico) {
-		
+
 		Servico servico = null;		
 		try {
 			Query query = getEntityManager().createNamedQuery("Servico.UltimoServico");
@@ -225,6 +225,23 @@ public class ServicoDAO implements IServicoDAO {
 			query.setParameter("tipoServico", tipoServico);
 			if(query.getSingleResult() != null){
 				servico = (Servico) query.getSingleResult();
+			}
+			return servico;
+		} catch (RuntimeException re) {
+			return null;
+			//EntityManagerHelper.log("find failed", Level.SEVERE, re);
+			//throw re;
+		}
+	}
+	public List<Servico> contaServicos(Veiculo veiculo, TipoServico tipoServico) {
+
+		List<Servico> servico = null;		
+		try {
+			Query query = getEntityManager().createNamedQuery("Servico.ContaServicos");
+			query.setParameter("veiculo", veiculo);
+			query.setParameter("tipoServico", tipoServico);
+			if(query.getResultList() != null){
+				servico = query.getResultList();
 			}
 			return servico;
 		} catch (RuntimeException re) {

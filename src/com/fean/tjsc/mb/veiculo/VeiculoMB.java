@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -22,10 +23,13 @@ import com.fean.tjsc.dao.tiposervico.TipoServicoDAO;
 import com.fean.tjsc.dao.tiposervico.TipoServicoModelo;
 import com.fean.tjsc.dao.tiposervico.TipoServicoModeloDAO;
 import com.fean.tjsc.dao.tiposervico.TipoServicoModeloId;
+import com.fean.tjsc.dao.tiposervico.TipoServicoVeiculo;
+import com.fean.tjsc.dao.tiposervico.TipoServicoVeiculoDAO;
 import com.fean.tjsc.dao.usuario.Usuario;
 import com.fean.tjsc.dao.usuario.UsuarioDAO;
 import com.fean.tjsc.dao.veiculo.Veiculo;
 import com.fean.tjsc.dao.veiculo.VeiculoDAO;
+import com.fean.tjsc.util.DataUtil;
 
 
 
@@ -42,23 +46,11 @@ public class VeiculoMB {
 
 	}
 
-	public String inserir(Abastecimento abastecimento) {
-
+	public String inserir(Veiculo veiculo) {
 		String retorno = "ok";
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
+		VeiculoDAO veiculoDAO = VeiculoDAO.getInstance();
 		try {
-			daoAbastecimento.save(abastecimento);
-		} catch (Exception e) {
-			retorno = "erro";
-		}
-		return retorno;
-	}
-
-	public String editar(Abastecimento abastecimento) {
-		String retorno = "ok";
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
-		try {
-			daoAbastecimento.update(abastecimento);
+			veiculoDAO.save(veiculo);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
@@ -66,21 +58,34 @@ public class VeiculoMB {
 		return retorno;
 	}
 
-
-	public String apagar(Abastecimento abastecimento) {
+	public String editar(Veiculo veiculo) {
 		String retorno = "ok";
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
+		VeiculoDAO veiculoDAO = VeiculoDAO.getInstance();
 		try {
-			daoAbastecimento.delete(abastecimento);
+			veiculoDAO.update(veiculo);
 		} catch (Exception e) {
 			retorno = "erro";
 		}
+
 		return retorno;
 	}
 
-	public Abastecimento retornarAbastecimento(int id) {
-		AbastecimentoDAO daoAbastecimento = AbastecimentoDAO.getInstance();
-		return daoAbastecimento.findById(id);
+
+	public String apagar(Veiculo veiculo) {
+		String retorno = "ok";
+		VeiculoDAO veiculoDAO = VeiculoDAO.getInstance();
+		try {
+			veiculoDAO.delete(veiculo);
+		} catch (Exception e) {
+			retorno = "erro";
+		}
+
+		return retorno;
+	}
+
+	public Veiculo retornarVeiculo(int id) {
+		VeiculoDAO veiculoDAO = VeiculoDAO.getInstance();
+		return veiculoDAO.findById(id);
 
 	}
 
@@ -88,122 +93,201 @@ public class VeiculoMB {
 		VeiculoDAO veiculoDAO = VeiculoDAO.getInstance();
 		return veiculoDAO.findAll();
 	}
-	/*
-
-	public String statusVeiculo (Veiculo veiculo){
-		String retorno = "";
-		ServicoDAO servicoDAO = ServicoDAO.getInstance();
-		AbastecimentoDAO abastecimentoDAO = AbastecimentoDAO.getInstance();
-		//TipoServicoDAO tipoServicoDAO = TipoServicoDAO.getInstance();
-		TipoServicoModeloDAO tipoServicoModeloDAO = TipoServicoModeloDAO.getInstance();
-		//long dataHoje = new java.util.Date().getTime();				
-		List<Servico> listaServicos = servicoDAO.findAll();
-		
-		for (int i=0;i<listaServicos.size();i++){
-			// se o veiculo possui servico efetuado entra aqui			
-			
-			
-			int posicaoUltimoServico = listaServicosVeiculo.lastIndexOf(veiculo);
-			TipoServicoModeloId tsm = new TipoServicoModeloId();
-			tsm.setModeloIdmodelo(veiculo.getModelo().getIdmodelo());
-			tsm.setTipoServicoIdtipoServico(listaServicosVeiculo.get(posicaoUltimoServico).getTipoServico().getIdtipoServico());
-			int kmUltimoServico = listaServicosVeiculo.get(posicaoUltimoServico).getKm();
-			TipoServicoModelo temp = tipoServicoModeloDAO.findById(tsm);
-			int kmProximoServico = temp.getKm();
-			double percentualAviso = 0.8;
-			java.util.Date dataHoje = new java.util.Date(System.currentTimeMillis());
-			SimpleDateFormat formatarDate = new SimpleDateFormat("yyyy-MM-dd");   
-			System.out.print(formatarDate.format(dataHoje));  
-
-			if ( (veiculo.getOdometro() > ( kmUltimoServico + (kmProximoServico * percentualAviso/100))) ){
-				// testar para ver se é amarelo ou vermelho
-				if ( veiculo.getOdometro() < ( kmProximoServico + kmUltimoServico) ){
-					retorno = "amarelo";						
-				}
-				else {
-					retorno = "vermelho";
-				}
-			}
-			else {
-				retorno = "verde";
-			}
-			
-			// se nao possui nenhum servico, compara com: km do ultimo abastecimento + km tipo do servico para ver se passou
-			Abastecimento abastecimentoMin = new Abastecimento();
-			abastecimentoMin = abastecimentoDAO.findMinAbastecimento(veiculo);
-			java.util.Date dataAmarelo = new java.util.Date();
-			java.util.Date dataVermelho = new java.util.Date();
-			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.MONTH, 1);
-			
-			if ( veiculo.getOdometro() > ( abastecimentoMin.getKmOdometro() + (kmProximoServico * percentualAviso))
-					|| dataHoje.after(abastecimentoMin.getData2()) ) {
-				if (veiculo.getOdometro() < ( abastecimentoMin.getKmOdometro() + kmProximoServico)
-					|| dataHoje.after(abastecimentoMin.getData2())){
-					retorno = "amarelo";
-				}
-				else {
-					retorno = "vermelho";
-				}				
-			}
-			else {
-				retorno = "verde";
-			}
-			
-		}
-		return retorno;
-	}
-	*/
 	
-	public String statusVeiculo (Veiculo veiculo){
+	public List<TipoServicoModelo> statusVeiculos () throws ClassNotFoundException, SQLException{
+		
+		List<Veiculo> veiculo = finbByAll();
+		List<TipoServicoModelo> tiposServicosModeloVeiculo = null;
+		List<TipoServicoModelo> tiposServicosModeloResultado = null;
 		String retorno = "";
 		TipoServicoModeloDAO tiposervicomodeloDAO = TipoServicoModeloDAO.getInstance();
 		ServicoDAO servicoDAO = ServicoDAO.getInstance();
-		//AbastecimentoDAO abastecimentoDAO = AbastecimentoDAO.getInstance();
-		/*		
-		TipoServicoModeloId tsm = new TipoServicoModeloId();
-		tsm.setModeloIdmodelo(veiculo.getModelo().getIdmodelo());
-		JOptionPane.showMessageDialog(null, tsm.getModeloIdmodelo());	
-		*/			
-		List<TipoServicoModelo> tiposServicosModeloVeiculo = (List<TipoServicoModelo>) tiposervicomodeloDAO.findTipoServicoByModelo(veiculo.getModelo());
-		
-		for (int i=0;i<tiposServicosModeloVeiculo.size();i++){
-			JOptionPane.showMessageDialog(null,					
-					"ID veículo: " + veiculo.getIdveiculo() + " " +
-					"\nid tipo serviço: " + tiposServicosModeloVeiculo.get(i).getTipoServico().getIdtipoServico() + " " +
-					"\nnome tipo servico: " + tiposServicosModeloVeiculo.get(i).getTipoServico().getNome());
-		}
-		
-		for (int i=0;i<tiposServicosModeloVeiculo.size();i++){
-			// para cada tipo de servico busca o ultimo servico feito
-			// terminar o teste para cada servico quando != null
+		//TipoServicoVeiculoDAO tipoServicoVeiculoDAO = TipoServicoVeiculoDAO.getInstance();
+		Calendar hoje = Calendar.getInstance();
+
+		for (int i1=0;i1<veiculo.size();i1++){
 			
-			Servico ultimoServico = servicoDAO.findUltimoServico(veiculo, tiposServicosModeloVeiculo.get(i).getTipoServico());
-			retorno = "shit!";
-			// se nao encontrar nenhum, vai comparar o ultimo abastecimento + km proximo servico com a km inicial cadastrada
-			if (ultimoServico == null){
-				//Abastecimento ultimoAbastecimento = abastecimentoDAO.findUltimoAbastecimento(veiculo);
-				JOptionPane.showMessageDialog(null, "km cadastro: " + veiculo.getKmCadastro() +
-						"\nodometro veiculo: " + veiculo.getOdometro() +
-						"\ntipo servico:" + tiposServicosModeloVeiculo.get(i).getKm());
-				if( veiculo.getOdometro() > ( veiculo.getKmCadastro()  + (tiposServicosModeloVeiculo.get(i).getKm()*0.8) ) ){
-					if( veiculo.getOdometro() < (veiculo.getKmCadastro() + tiposServicosModeloVeiculo.get(i).getKm() ) ){
-						retorno = "amarelo";
+			tiposServicosModeloVeiculo = (List<TipoServicoModelo>) tiposervicomodeloDAO.findTipoServicoByModelo(veiculo.get(i1).getModelo());
+			
+			for (int i=0;i<tiposServicosModeloVeiculo.size();i++){
+				// para cada tipo de servico busca o ultimo servico feito
+				// terminar o teste para cada servico quando != null
+
+				Servico ultimoServico = servicoDAO.findUltimoServico(veiculo.get(i1), tiposServicosModeloVeiculo.get(i).getTipoServico());
+
+				if ( ultimoServico != null ){
+					Calendar dataUltimoServicoPercent = Calendar.getInstance();  
+					dataUltimoServicoPercent.setTime(ultimoServico.getData2());
+					dataUltimoServicoPercent.add(Calendar.MONTH, ((tiposServicosModeloVeiculo.get(i).getTempo()-1)));  // adicionar 5 meses  
+
+					Calendar dataUltimoServico = Calendar.getInstance();   
+					dataUltimoServico.setTime(ultimoServico.getData2());
+					dataUltimoServico.add(Calendar.MONTH, (tiposServicosModeloVeiculo.get(i).getTempo()));  // adicionar 6 meses
+
+					if ( (veiculo.get(i1).getOdometro() > (ultimoServico.getKm() + (tiposServicosModeloVeiculo.get(i).getKm()*0.8)))  
+							|| ( hoje.after(dataUltimoServicoPercent) ) ) {					
+						if ( ( (veiculo.get(i1).getOdometro() > ( ultimoServico.getKm() + (tiposServicosModeloVeiculo.get(i).getKm()*0.8)) 
+								&& veiculo.get(i1).getOdometro() < ( ultimoServico.getKm() + (tiposServicosModeloVeiculo.get(i).getKm())) ) ) 
+								|| ( hoje.after(dataUltimoServicoPercent) && hoje.before(dataUltimoServico) ) ){
+							if( hoje.after(dataUltimoServico)){
+								retorno = "vermelho";
+							}						
+							else{
+								retorno = "amarelo";
+							}
+						}
+						else{
+							retorno = "vermelho";
+						}
 					}
 					else{
-						retorno = "vermelho";
-					}
+						retorno = "verde";
+					}					
 				}
 				else{
-					retorno = "verde";
-				}
-			}
-		}
-		
-		return retorno;
-	}
 
-}
+					Calendar dataCadastroPercent = Calendar.getInstance();  
+					dataCadastroPercent.setTime(veiculo.get(i1).getDataCadastro());
+					dataCadastroPercent.add(Calendar.MONTH, ((tiposServicosModeloVeiculo.get(i).getTempo()-1)));  // adicionar 5 meses  
+
+					Calendar dataCadastro = Calendar.getInstance();   
+					dataCadastro.setTime(veiculo.get(i1).getDataCadastro());
+					dataCadastro.add(Calendar.MONTH, (tiposServicosModeloVeiculo.get(i).getTempo()));  // adicionar 6 meses
+
+					if ( (veiculo.get(i1).getOdometro() > (veiculo.get(i1).getKmCadastro() + (tiposServicosModeloVeiculo.get(i).getKm()*0.8)))  
+							|| ( hoje.after(dataCadastroPercent) ) ) {					
+						if ( ( (veiculo.get(i1).getOdometro() < ( veiculo.get(i1).getKmCadastro() + (tiposServicosModeloVeiculo.get(i).getKm())) 
+								&& veiculo.get(i1).getOdometro() < ( veiculo.get(i1).getKmCadastro() + (tiposServicosModeloVeiculo.get(i).getKm())) ) ) 
+								|| ( hoje.after(dataCadastroPercent) && hoje.before(dataCadastro) ) ){
+							if( hoje.after(dataCadastro) ){
+								retorno = "vermelho";
+							}
+							else{
+								retorno = "amarelo";
+							}						
+						}
+						else{
+							retorno = "vermelho";
+						}
+					}
+					else{
+						retorno = "verde";
+					}
+				}				
+			}
+			/* ver como fazer isso melhor com objetos:
+			TipoServicoVeiculo tsv = new TipoServicoVeiculo();
+			tsv.setVeiculo(veiculo);
+			tsv.setTipoServico((TipoServico) veiculo.getTipoServicoVeiculos());
+			tsv.setSituacao(retorno);
+			 */
+			veiculo.get(i1).setSituacao(retorno);
+			editar(veiculo.get(i1));
+			//return veiculo;
+			
+		}
+		return tiposServicosModeloResultado;
+	}
+	
+	public List<Veiculo> statusTodosVeiculos () throws ClassNotFoundException, SQLException{
+		
+		List<Veiculo> veiculo = finbByAll();
+		List<TipoServicoModelo> tiposServicosModeloVeiculo = null;
+		//List<TipoServicoModelo> tiposServicosModeloResultado = null;
+		String retorno = "";
+		TipoServicoModeloDAO tiposervicomodeloDAO = TipoServicoModeloDAO.getInstance();
+		ServicoDAO servicoDAO = ServicoDAO.getInstance();
+		//TipoServicoVeiculoDAO tipoServicoVeiculoDAO = TipoServicoVeiculoDAO.getInstance();
+		Calendar hoje = Calendar.getInstance();
+
+		for (int i1=0;i1<veiculo.size();i1++){
+			
+			tiposServicosModeloVeiculo = (List<TipoServicoModelo>) tiposervicomodeloDAO.findTipoServicoByModelo(veiculo.get(i1).getModelo());
+			
+			for (int i=0;i<tiposServicosModeloVeiculo.size();i++){
+				// para cada tipo de servico busca o ultimo servico feito
+				// terminar o teste para cada servico quando != null
+
+				Servico ultimoServico = servicoDAO.findUltimoServico(veiculo.get(i1), tiposServicosModeloVeiculo.get(i).getTipoServico());
+
+				if ( ultimoServico != null ){
+					Calendar dataUltimoServicoPercent = Calendar.getInstance();  
+					dataUltimoServicoPercent.setTime(ultimoServico.getData2());
+					dataUltimoServicoPercent.add(Calendar.MONTH, ((tiposServicosModeloVeiculo.get(i).getTempo()-1)));  // adicionar 5 meses  
+
+					Calendar dataUltimoServico = Calendar.getInstance();   
+					dataUltimoServico.setTime(ultimoServico.getData2());
+					dataUltimoServico.add(Calendar.MONTH, (tiposServicosModeloVeiculo.get(i).getTempo()));  // adicionar 6 meses
+
+					if ( (veiculo.get(i1).getOdometro() > (ultimoServico.getKm() + (tiposServicosModeloVeiculo.get(i).getKm()*0.8)))  
+							|| ( hoje.after(dataUltimoServicoPercent) ) ) {					
+						if ( ( (veiculo.get(i1).getOdometro() > ( ultimoServico.getKm() + (tiposServicosModeloVeiculo.get(i).getKm()*0.8)) 
+								&& veiculo.get(i1).getOdometro() < ( ultimoServico.getKm() + (tiposServicosModeloVeiculo.get(i).getKm())) ) ) 
+								|| ( hoje.after(dataUltimoServicoPercent) && hoje.before(dataUltimoServico) ) ){
+							if( hoje.after(dataUltimoServico)){
+								retorno = "vermelho";
+							}						
+							else{
+								retorno = "amarelo";
+							}
+						}
+						else{
+							retorno = "vermelho";
+						}
+					}
+					else{
+						retorno = "verde";
+					}					
+				}
+				else{
+
+					Calendar dataCadastroPercent = Calendar.getInstance();  
+					dataCadastroPercent.setTime(veiculo.get(i1).getDataCadastro());
+					dataCadastroPercent.add(Calendar.MONTH, ((tiposServicosModeloVeiculo.get(i).getTempo()-1)));  // adicionar 5 meses  
+
+					Calendar dataCadastro = Calendar.getInstance();   
+					dataCadastro.setTime(veiculo.get(i1).getDataCadastro());
+					dataCadastro.add(Calendar.MONTH, (tiposServicosModeloVeiculo.get(i).getTempo()));  // adicionar 6 meses
+
+					if ( (veiculo.get(i1).getOdometro() > (veiculo.get(i1).getKmCadastro() + (tiposServicosModeloVeiculo.get(i).getKm()*0.8)))  
+							|| ( hoje.after(dataCadastroPercent) ) ) {					
+						if ( ( (veiculo.get(i1).getOdometro() < ( veiculo.get(i1).getKmCadastro() + (tiposServicosModeloVeiculo.get(i).getKm())) 
+								&& veiculo.get(i1).getOdometro() < ( veiculo.get(i1).getKmCadastro() + (tiposServicosModeloVeiculo.get(i).getKm())) ) ) 
+								|| ( hoje.after(dataCadastroPercent) && hoje.before(dataCadastro) ) ){
+							if( hoje.after(dataCadastro) ){
+								retorno = "vermelho";
+							}
+							else{
+								retorno = "amarelo";
+							}						
+						}
+						else{
+							retorno = "vermelho";
+						}
+					}
+					else{
+						retorno = "verde";
+					}
+				}				
+			}
+			/* ver como fazer isso melhor com objetos:
+			TipoServicoVeiculo tsv = new TipoServicoVeiculo();
+			tsv.setVeiculo(veiculo);
+			tsv.setTipoServico((TipoServico) veiculo.getTipoServicoVeiculos());
+			tsv.setSituacao(retorno);
+			 */
+			veiculo.get(i1).setSituacao(retorno);
+			editar(veiculo.get(i1));
+			//return veiculo;
+			
+		}
+		return veiculo;
+	}
+		
+
+}	
+
+
 
 
 

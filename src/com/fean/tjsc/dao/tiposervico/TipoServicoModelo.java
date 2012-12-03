@@ -1,6 +1,8 @@
 package com.fean.tjsc.dao.tiposervico;
 // default package
 
+import java.util.Date;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -21,7 +23,7 @@ import com.fean.tjsc.dao.modelo.Modelo;
 @javax.persistence.NamedQueries({
     @javax.persistence.NamedQuery(
 		name="TipoServicoModelo.findByIdModelo",
-		query="SELECT tsm FROM TipoServicoModelo tsm WHERE tsm.modelo = :modelo)"
+		query="SELECT tsm FROM TipoServicoModelo tsm WHERE tsm.modelo = :modelo ORDER BY Modelo"
     )
 })
 public class TipoServicoModelo implements java.io.Serializable {
@@ -33,6 +35,7 @@ public class TipoServicoModelo implements java.io.Serializable {
 	private TipoServico tipoServico;
 	private Integer km;
 	private Integer tempo;
+	private Date dataProximoServico;
 
 	// Constructors
 
@@ -107,6 +110,15 @@ public class TipoServicoModelo implements java.io.Serializable {
 
 	public void setTempo(Integer tempo) {
 		this.tempo = tempo;
+	}
+	
+	@Column(name = "data_proximo_servico")
+	public Date getDataProximoServico() {
+		return this.dataProximoServico;
+	}
+
+	public void setDataProximoServico(Date dataProximoServico) {
+		this.dataProximoServico = dataProximoServico;
 	}
 
 }

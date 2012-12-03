@@ -109,7 +109,7 @@ public class TelaCadastroServicoEfetuado extends JPanel {
 				String retorno = "";
 				Servico serv = new Servico();				
 				ServicoMB mbServico = ServicoMB.getInstance();
-				
+
 				try {
 					SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 					java.util.Date dataUtil = df.parse(txtData.getText());
@@ -122,31 +122,35 @@ public class TelaCadastroServicoEfetuado extends JPanel {
 					serv.setData2(dataJDBC);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, "Data inválida, por favor verifique");
 					e.printStackTrace();
 				}
-				
+
 				serv.setVeiculo((Veiculo) comboBoxVeiculo.getSelectedItem());
 				serv.setFornecedor((Fornecedor) comboBoxFornecedor.getSelectedItem());
 				serv.setMotorista((Motorista) comboBoxMotorista.getSelectedItem());
 				serv.setTipoServico((TipoServico)comboBoxTipoServico.getSelectedItem());				
-				serv.setUsuario(user);
-				serv.setNroOrcamento(txtOrcamento.getText());
-				serv.setNfTicket(Integer.parseInt(txtNF.getText()));
-				serv.setDescricao(txtDescricao.getText());
-				serv.setKm(Integer.parseInt(txtKM.getText()));				
-				serv.setValor(Double.parseDouble(txtValor.getText()));				
+				
+				if ( (txtNF.getText() == "") || (txtKM.getText() == "") || (txtValor.getText() == "")){
+					JOptionPane.showMessageDialog(null, "Os campos não podem ficar em branco, verifique.");
+				}else{
+					serv.setNfTicket(Integer.parseInt(txtNF.getText()));				
+					serv.setKm(Integer.parseInt(txtKM.getText()));			
+					serv.setValor(Double.parseDouble(txtValor.getText()));
+					serv.setUsuario(user);
+					serv.setNroOrcamento(txtOrcamento.getText());
+					serv.setDescricao(txtDescricao.getText());
+					retorno = mbServico.validarServico(serv);
 
-				retorno = mbServico.validarServico(serv);
-
-				if (retorno == "ok"){
-					mbServico.inserir(serv);
-					JOptionPane.showMessageDialog(null, "Serviço cadastrado com sucesso");
-					voltarTelaListagem();
-				}
-				else{
-					JOptionPane.showMessageDialog(null, retorno);
-				}			
-
+					if (retorno == "ok"){
+						mbServico.inserir(serv);
+						JOptionPane.showMessageDialog(null, "Serviço cadastrado com sucesso.");
+						voltarTelaListagem();
+					}
+					else{
+						JOptionPane.showMessageDialog(null, retorno);
+					}
+				}	
 			}
 		});
 
@@ -274,9 +278,9 @@ public class TelaCadastroServicoEfetuado extends JPanel {
 		VeiculoMB mbVeiculo = VeiculoMB.getInstance();		
 		List<Veiculo> veiculos;
 		DefaultComboBoxModel comboModel = (DefaultComboBoxModel) comboBoxVeiculo.getModel();
-        comboModel.removeAllElements();
-        
-        try {
+		comboModel.removeAllElements();
+
+		try {
 			veiculos = mbVeiculo.finbByAll();
 			for (int i=0;i<veiculos.size();i++){
 				comboModel.addElement(veiculos.get(i));
@@ -296,8 +300,8 @@ public class TelaCadastroServicoEfetuado extends JPanel {
 		FornecedorMB mbFornecedor = FornecedorMB.getInstance();		
 		List<Fornecedor> fornecedores;
 		DefaultComboBoxModel comboModel = (DefaultComboBoxModel) comboBoxFornecedor.getModel();
-        comboModel.removeAllElements();
-        
+		comboModel.removeAllElements();
+
 		try {
 			fornecedores = mbFornecedor.finbByAll();
 			for (int i=0;i<fornecedores.size();i++){
@@ -318,7 +322,7 @@ public class TelaCadastroServicoEfetuado extends JPanel {
 		MotoristaMB mbMotorista = MotoristaMB.getInstance();		
 		List<Motorista> motoristas;
 		DefaultComboBoxModel comboModel = (DefaultComboBoxModel) comboBoxMotorista.getModel();
-        comboModel.removeAllElements();
+		comboModel.removeAllElements();
 		try {
 			motoristas = mbMotorista.finbByAll();
 			for (int i=0;i<motoristas.size();i++){
@@ -339,7 +343,7 @@ public class TelaCadastroServicoEfetuado extends JPanel {
 		TipoServicoMB mbTipoServico = TipoServicoMB.getInstance();		
 		List<TipoServico> tiposServico;
 		DefaultComboBoxModel comboModel = (DefaultComboBoxModel) comboBoxTipoServico.getModel();
-        comboModel.removeAllElements();
+		comboModel.removeAllElements();
 
 		try {
 			tiposServico = mbTipoServico.finbByAll();

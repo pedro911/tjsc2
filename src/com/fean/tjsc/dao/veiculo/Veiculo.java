@@ -2,6 +2,7 @@ package com.fean.tjsc.dao.veiculo;
 // default package
 
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -42,6 +43,7 @@ public class Veiculo implements java.io.Serializable {
 	private Integer odometro;
 	private Integer kmCadastro;
 	private String situacao;
+	private Date dataCadastro;
 	private Set<Abastecimento> abastecimentos = new HashSet<Abastecimento>(0);
 	private Set<Servico> servicos = new HashSet<Servico>(0);
 	private Set<TipoServicoVeiculo> tipoServicoVeiculos = new HashSet<TipoServicoVeiculo>(
@@ -63,7 +65,7 @@ public class Veiculo implements java.io.Serializable {
 	/** full constructor */
 	public Veiculo(Modelo modelo, Motorista motorista, Unidade unidade,
 			String placa, String revavan, String chassi, Integer odometro,
-			String situacao, Integer kmCadastro, Set<Abastecimento> abastecimentos,
+			String situacao, Integer kmCadastro, Date dataCadastro, Set<Abastecimento> abastecimentos,
 			Set<Servico> servicos, Set<TipoServicoVeiculo> tipoServicoVeiculos) {
 		this.modelo = modelo;
 		this.motorista = motorista;
@@ -74,6 +76,7 @@ public class Veiculo implements java.io.Serializable {
 		this.odometro = odometro;
 		this.situacao = situacao;
 		this.kmCadastro = kmCadastro;
+		this.dataCadastro = dataCadastro;
 		this.abastecimentos = abastecimentos;
 		this.servicos = servicos;
 		this.tipoServicoVeiculos = tipoServicoVeiculos;
@@ -164,6 +167,15 @@ public class Veiculo implements java.io.Serializable {
 
 	public void setKmCadastro(Integer kmCadastro) {
 		this.kmCadastro = kmCadastro;
+	}
+	
+	@Column(name = "data_cadastro")
+	public Date getDataCadastro() {
+		return this.dataCadastro;
+	}
+
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
 	@Column(name = "situacao")

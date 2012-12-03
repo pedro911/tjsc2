@@ -104,6 +104,8 @@ public interface IVeiculoDAO {
 	public List<Veiculo> findBySituacao(Object situacao);
 	
 	public List<Veiculo> findByKmCadastro(Object kmcadastro);
+	
+	public List<Veiculo> findByDataCadastro(Object datacadastro);
 
 	/**
 	 * Find all Veiculo entities.

@@ -87,7 +87,6 @@ public class Login extends JFrame {
 				boolean resultado = usuarioMB.validarUsuarioLogin(txtUsuario.getText(), String.valueOf(txtSenha.getPassword()));
 							
 				if (resultado == true){
-					//boolean adm = usuarioMB.verificaUsuarioAdministrador(txtUsuario.getText());
 					TelaPrincipal.user = usuarioMB.findById(txtUsuario.getText());					
 					//aqui abrir tela principal
 					TelaPrincipal p1 = new TelaPrincipal();
