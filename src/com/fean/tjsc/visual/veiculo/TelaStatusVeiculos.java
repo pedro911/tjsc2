@@ -95,17 +95,15 @@ public class TelaStatusVeiculos extends JPanel {
 					servicosPendentes.setOdometro(Integer.parseInt(table.getValueAt(i, 2).toString()));
 					servicosPendentes.setKmProximoServico(Integer.parseInt(table.getValueAt(i, 3).toString()));
 					servicosPendentes.setDataProximoServico( table.getValueAt(i, 4).toString());
-					servicosPendentes.setTipoServico(  table.getValueAt(i, 5).toString());
+					servicosPendentes.setServicoFazer(  table.getValueAt(i, 5).toString());
 					servicosPendentes.setSituacaoVeiculo(  table.getValueAt(i, 6).toString());
 					servicosPendentes.setSituacaoServico(  table.getValueAt(i, 7).toString());
-					listaServicos.add(servicosPendentes);				
-					
+					listaServicos.add(servicosPendentes);					
 				}	
 				
 				JasperReport report;
 				try {
-					report =
-							JasperCompileManager .compileReport("relatorios/servicosPendentes.jrxml");
+					report = JasperCompileManager.compileReport("relatorios/servicosPendentes2.jrxml");
 					JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaServicos));
 					// exportacao do relatorio para outro formato, no caso PDF
 					JasperExportManager.exportReportToPdfFile(print, "relatorios/Relatorio.pdf");

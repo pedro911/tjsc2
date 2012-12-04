@@ -39,8 +39,7 @@ public class Principal {
 		// compilacao do JRXML 
 		JasperReport report;
 		try {
-			report =
-					JasperCompileManager .compileReport("relatorios/teste.jrxml");
+			report = JasperCompileManager.compileReport("relatorios/teste.jrxml");
 			JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(lista));
 			// exportacao do relatorio para outro formato, no caso PDF
 			JasperExportManager.exportReportToPdfFile(print, "relatorios/Relatorio.pdf");
