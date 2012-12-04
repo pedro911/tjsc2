@@ -175,16 +175,8 @@ public class VeiculoMB {
 					}
 				}				
 			}
-			/* ver como fazer isso melhor com objetos:
-			TipoServicoVeiculo tsv = new TipoServicoVeiculo();
-			tsv.setVeiculo(veiculo);
-			tsv.setTipoServico((TipoServico) veiculo.getTipoServicoVeiculos());
-			tsv.setSituacao(retorno);
-			 */
 			veiculo.get(i1).setSituacao(retorno);
-			editar(veiculo.get(i1));
-			//return veiculo;
-			
+			editar(veiculo.get(i1));			
 		}
 		return tiposServicosModeloResultado;
 	}
@@ -270,16 +262,8 @@ public class VeiculoMB {
 					}
 				}				
 			}
-			/* ver como fazer isso melhor com objetos:
-			TipoServicoVeiculo tsv = new TipoServicoVeiculo();
-			tsv.setVeiculo(veiculo);
-			tsv.setTipoServico((TipoServico) veiculo.getTipoServicoVeiculos());
-			tsv.setSituacao(retorno);
-			 */
 			veiculo.get(i1).setSituacao(retorno);
-			editar(veiculo.get(i1));
-			//return veiculo;
-			
+			editar(veiculo.get(i1));			
 		}
 		return veiculo;
 	}

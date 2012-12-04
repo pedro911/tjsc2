@@ -36,6 +36,7 @@ public class TipoServicoModelo implements java.io.Serializable {
 	private Integer km;
 	private Integer tempo;
 	private Date dataProximoServico;
+	private String situacao;
 
 	// Constructors
 
@@ -119,6 +120,15 @@ public class TipoServicoModelo implements java.io.Serializable {
 
 	public void setDataProximoServico(Date dataProximoServico) {
 		this.dataProximoServico = dataProximoServico;
+	}
+	
+	@Column(name = "situacao")
+	public String getSituacao() {
+		return this.situacao;
+	}
+
+	public void setSituacao(String situacao) {
+		this.situacao = situacao;
 	}
 
 }

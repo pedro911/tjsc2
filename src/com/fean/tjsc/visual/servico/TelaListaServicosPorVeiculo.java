@@ -67,9 +67,6 @@ public class TelaListaServicosPorVeiculo extends JPanel {
 
 		JScrollPane scrollPane = new JScrollPane();
 
-		JButton btnEditar = new JButton("Editar");
-		btnEditar.setAction(action);
-
 		JButton btnInserir = new JButton("Imprimir Relat\u00F3rio");
 		
 		JLabel lblVeculo = new JLabel("Ve\u00EDculo:");
@@ -99,7 +96,7 @@ public class TelaListaServicosPorVeiculo extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE))
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(lblVeculo)
@@ -114,14 +111,12 @@ public class TelaListaServicosPorVeiculo extends JPanel {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(txtSituacao, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addContainerGap(339, Short.MAX_VALUE)
-							.addComponent(btnInserir)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnEditar))
-						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(163)
-							.addComponent(lblServiosPendentes, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-							.addGap(153)))
+							.addComponent(lblServiosPendentes, GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+							.addGap(153))
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addContainerGap(402, Short.MAX_VALUE)
+							.addComponent(btnInserir)))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -138,11 +133,9 @@ public class TelaListaServicosPorVeiculo extends JPanel {
 						.addComponent(lblSituao)
 						.addComponent(txtSituacao, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
 					.addGap(11)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnEditar)
-						.addComponent(btnInserir))
+					.addComponent(btnInserir)
 					.addContainerGap())
 		);
 
@@ -152,9 +145,19 @@ public class TelaListaServicosPorVeiculo extends JPanel {
 			new Object[][] {
 			},
 			new String[] {
-				"Id", "Servi\u00E7o a fazer", "Km pr\u00F3ximo servi\u00E7o", "Data pr\u00F3ximo servi\u00E7o"
+				"Id", "Servi\u00E7o a fazer", "Km pr\u00F3ximo servi\u00E7o", "Data pr\u00F3ximo servi\u00E7o", "Situa\u00E7\u00E3o Servi\u00E7o"
 			}
-		));
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		table.getColumnModel().getColumn(0).setPreferredWidth(15);
+		table.getColumnModel().getColumn(0).setMinWidth(0);
+		table.getColumnModel().getColumn(0).setMaxWidth(15);
 
 		atualizaTabela();
 
@@ -217,14 +220,19 @@ public class TelaListaServicosPorVeiculo extends JPanel {
 		List<TipoServicoModelo> tiposServicosModeloVeiculo = (List<TipoServicoModelo>) tipoServicoModeloMB.findTipoServicoByModelo(veiculo);	
 		
 		for (int i=0;i<tiposServicosModeloVeiculo.size();i++){
+			SimpleDateFormat out = new SimpleDateFormat("dd/MM/yyyy");  				  
+			String dataBR = out.format( tiposServicosModeloVeiculo.get(i).getDataProximoServico().getTime() );							
 			
 			((DefaultTableModel)table.getModel()).addRow(new String[] {
 					veiculo.getIdveiculo()+"",
 					tiposServicosModeloVeiculo.get(i).getTipoServico().getNome(), // servico a fazer
 					tiposServicosModeloVeiculo.get(i).getKm()+"", // km do proximo servico
-					tiposServicosModeloVeiculo.get(i).getDataProximoServico()+"", // data proximo servico					
+					dataBR, // data proximo servico
+					tiposServicosModeloVeiculo.get(i).getSituacao() //situacao do serviço
 			});
-		}			
+		}
+		table.getTableHeader().getColumnModel().getColumn( 0 ).setMaxWidth( 0 );  
+		table.getTableHeader().getColumnModel().getColumn( 0 ).setMinWidth( 0 ); 
 		
 		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {  
 			public Component getTableCellRendererComponent(JTable table, Object value,  

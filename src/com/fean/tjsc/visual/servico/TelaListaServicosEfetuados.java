@@ -106,28 +106,6 @@ public class TelaListaServicosEfetuados extends JPanel {
 
 		atualizaTabela();
 
-		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {  
-			public Component getTableCellRendererComponent(JTable table, Object value,  
-					boolean isSelected, boolean hasFocus, int row, int column) {  
-				super.getTableCellRendererComponent(table, value, isSelected,  
-						hasFocus, row, column);  
-				/* para definir cores para a linha da tabela de acordo com a situacao do servico
-				if (row == 0) {  
-					setBackground(Color.RED);
-					setForeground(Color.WHITE);
-				} 
-				else if (row == 1) {  
-					setBackground(Color.YELLOW);
-					setForeground(Color.BLACK);
-				} 
-				else {  
-					setBackground(null);
-					setForeground(null);
-				}
-				 */  
-				return this;  
-			}  
-		});
 		scrollPane.setViewportView(table);
 		setLayout(groupLayout);
 

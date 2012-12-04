@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -40,10 +41,20 @@ import com.fean.tjsc.mb.tiposervico.TipoServicoModeloMB;
 import com.fean.tjsc.mb.veiculo.VeiculoMB;
 import com.fean.tjsc.visual.principal.TelaPrincipal;
 import com.fean.tjsc.visual.servico.TelaListaServicosPorVeiculo;
+import com.fean.tjsc.util.ServicosPendentes;
 
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Font;
@@ -51,6 +62,7 @@ import java.awt.Font;
 public class TelaStatusVeiculos extends JPanel {
 	private static JTable table;
 	private final Action action = new SwingAction();
+	static List listaServicos = new ArrayList();	
 
 	/**
 	 * Create the panel.
@@ -63,11 +75,6 @@ public class TelaStatusVeiculos extends JPanel {
 
 		JScrollPane scrollPane = new JScrollPane();
 
-		JButton btnEditar = new JButton("Editar");
-		btnEditar.setAction(action);
-
-		JButton btnInserir = new JButton("Inserir");
-
 		JButton btnMaisDetalhes = new JButton("Mais detalhes");
 		btnMaisDetalhes.addMouseListener(new MouseAdapter() {
 			@Override
@@ -76,83 +83,105 @@ public class TelaStatusVeiculos extends JPanel {
 				abrirTelaListaServicosPorVeiculo();
 			}
 		});
+		
+		JButton btnImprimirRelatrio = new JButton("Imprimir Relat\u00F3rio");
+		btnImprimirRelatrio.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+				for (int i=0;i<table.getRowCount();i++){
+					ServicosPendentes servicosPendentes = new ServicosPendentes();
+					servicosPendentes.setPlaca(table.getValueAt(i, 1).toString());
+					servicosPendentes.setOdometro(Integer.parseInt(table.getValueAt(i, 2).toString()));
+					servicosPendentes.setKmProximoServico(Integer.parseInt(table.getValueAt(i, 3).toString()));
+					servicosPendentes.setDataProximoServico( table.getValueAt(i, 4).toString());
+					servicosPendentes.setTipoServico(  table.getValueAt(i, 5).toString());
+					servicosPendentes.setSituacaoVeiculo(  table.getValueAt(i, 6).toString());
+					servicosPendentes.setSituacaoServico(  table.getValueAt(i, 7).toString());
+					listaServicos.add(servicosPendentes);				
+					
+				}	
+				
+				JasperReport report;
+				try {
+					report =
+							JasperCompileManager .compileReport("relatorios/servicosPendentes.jrxml");
+					JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaServicos));
+					// exportacao do relatorio para outro formato, no caso PDF
+					JasperExportManager.exportReportToPdfFile(print, "relatorios/Relatorio.pdf");
+					System.out.println("Relatório gerado.");
+					JOptionPane.showMessageDialog(null,"Relatório gerado.");
+				} catch (JRException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		});
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-										.addContainerGap()
-										.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE))
-										.addGroup(groupLayout.createSequentialGroup()
-												.addGap(178)
-												.addComponent(lblServiosPendentes, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-												.addGap(168))
-												.addGroup(groupLayout.createSequentialGroup()
-														.addContainerGap(290, Short.MAX_VALUE)
-														.addComponent(btnMaisDetalhes)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(btnInserir)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(btnEditar)))
-														.addContainerGap())
-				);
-		groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-						.addGap(5)
-						.addComponent(lblServiosPendentes)
-						.addGap(18)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnEditar)
-								.addComponent(btnInserir)
-								.addComponent(btnMaisDetalhes))
-								.addContainerGap())
-				);
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(178)
+							.addComponent(lblServiosPendentes, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+							.addGap(168))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap(306, Short.MAX_VALUE)
+							.addComponent(btnImprimirRelatrio)
+							.addGap(18)
+							.addComponent(btnMaisDetalhes)))
+					.addContainerGap())
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(5)
+					.addComponent(lblServiosPendentes)
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnMaisDetalhes)
+						.addComponent(btnImprimirRelatrio))
+					.addContainerGap())
+		);
 
 
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() > 1){
+					abrirTelaListaServicosPorVeiculo();
+				}
+			}
+		});
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
-				"Id", "Ve\u00EDculo", "Odometro", "Km Pr\u00F3ximo Servi\u00E7o", "Data Pr\u00F3ximo Servi\u00E7o", "Tipo Servi\u00E7o", "Situa\u00E7\u00E3o"
+				"Id", "Ve\u00EDculo", "Odometro", "Km Pr\u00F3ximo Servi\u00E7o", "Data Pr\u00F3ximo Servi\u00E7o", "Tipo Servi\u00E7o", "Situa\u00E7\u00E3o Ve\u00EDculo", "Situa\u00E7\u00E3o Servi\u00E7o"
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
-				true, false, true, true, true, true, false
+				false, false, false, false, false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
+		table.getColumnModel().getColumn(0).setPreferredWidth(15);
+		table.getColumnModel().getColumn(0).setMinWidth(0);
+		table.getColumnModel().getColumn(0).setMaxWidth(15);
+		table.getColumnModel().getColumn(1).setPreferredWidth(59);
+		table.getColumnModel().getColumn(2).setPreferredWidth(62);
 
-		atualizaTabela2();
-
-		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {  
-			public Component getTableCellRendererComponent(JTable table, Object value,  
-					boolean isSelected, boolean hasFocus, int row, int column) {  
-				super.getTableCellRendererComponent(table, value, isSelected,  
-						hasFocus, row, column);  
-				/* para definir cores para a linha da tabela de acordo com a situacao do servico
-				if (status =="vermelho") {  
-					setBackground(Color.RED);
-					setForeground(Color.WHITE);
-				} 
-				else if (status =="amarelo") {  
-					setBackground(Color.YELLOW);
-					setForeground(Color.BLACK);
-				} 
-				else {  
-					setBackground(null);
-					setForeground(null);
-				}
-				 */
-				return this;  
-			}  
-		});		
+		atualizaTabela2();			
 
 		scrollPane.setViewportView(table);
 		setLayout(groupLayout);
@@ -240,29 +269,57 @@ public class TelaStatusVeiculos extends JPanel {
 		 */
 
 		try {
-			List<Veiculo> veiculoTestado = veiculoMB.statusTodosVeiculos();			
-
+			List<Veiculo> veiculoTestado = veiculoMB.statusTodosVeiculos();
+			String dataBR = "";
 			for (int i1=0;i1<veiculoTestado.size();i1++){
-				
 				if(veiculoTestado.get(i1).getSituacao() != "verde"){
-					
 					List<TipoServicoModelo> tiposServicosModeloVeiculo = (List<TipoServicoModelo>) tipoServicoModeloMB.findTipoServicoByModelo(veiculoTestado.get(i1));
-
 					for (int i=0;i<tiposServicosModeloVeiculo.size();i++){
-
-						((DefaultTableModel)table.getModel()).addRow(new String[] {
-								veiculoTestado.get(i1).getIdveiculo()+"",
-								veiculoTestado.get(i1).getPlaca(),								
-								veiculoTestado.get(i1).getOdometro()+"",
-								tiposServicosModeloVeiculo.get(i).getKm()+"", // km do proximo servico
-								tiposServicosModeloVeiculo.get(i).getDataProximoServico()+"", // data proximo servico
-								tiposServicosModeloVeiculo.get(i).getTipoServico().getNome(), // servico a fazer
-								veiculoTestado.get(i1).getSituacao()
-						});
-					}
+						if (tiposServicosModeloVeiculo.get(i).getSituacao() != "verde"){							
+							SimpleDateFormat out = new SimpleDateFormat("dd/MM/yyyy");  				  
+							dataBR = out.format( tiposServicosModeloVeiculo.get(i).getDataProximoServico().getTime() );							
+							((DefaultTableModel)table.getModel()).addRow(new String[] {
+									veiculoTestado.get(i1).getIdveiculo()+"",
+									veiculoTestado.get(i1).getPlaca(),								
+									veiculoTestado.get(i1).getOdometro()+"",
+									tiposServicosModeloVeiculo.get(i).getKm()+"", // km do proximo servico
+									dataBR, // data proximo servico
+									tiposServicosModeloVeiculo.get(i).getTipoServico().getNome(), // servico a fazer
+									veiculoTestado.get(i1).getSituacao(),
+									tiposServicosModeloVeiculo.get(i).getSituacao() //situacao do serviço
+							});							
+						}						
+					}				
 				}
 			}
-
+			
+			table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {  
+				public Component getTableCellRendererComponent(JTable table, Object value,  
+						boolean isSelected, boolean hasFocus, int row, int column) {  
+					super.getTableCellRendererComponent(table, value, isSelected,  
+							hasFocus, row, column);  
+					// para definir cores para a linha da tabela de acordo com a situacao do servico
+					
+						if (table.getValueAt(row, 6) =="vermelho") {  
+							setBackground(Color.RED);
+							setForeground(Color.WHITE);
+						} 
+						else if (table.getValueAt(row, 6) =="amarelo") {  
+							setBackground(Color.YELLOW);
+							setForeground(Color.BLACK);
+						} 
+						else {  
+							setBackground(null);
+							setForeground(null);
+						}	
+										
+											
+					return this;  
+				}  
+			});
+			table.getTableHeader().getColumnModel().getColumn( 0 ).setMaxWidth( 0 );  
+			table.getTableHeader().getColumnModel().getColumn( 0 ).setMinWidth( 0 ); 
+			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -293,5 +350,5 @@ public class TelaStatusVeiculos extends JPanel {
 		parent.getContentPane().validate();   
 		parent.getContentPane().repaint();
 	}
-
+	
 }

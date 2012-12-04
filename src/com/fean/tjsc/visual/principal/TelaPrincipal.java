@@ -295,7 +295,7 @@ public class TelaPrincipal extends JFrame {
 			putValue(SHORT_DESCRIPTION, "Lista serviços pendentes");
 		}
 		public void actionPerformed(ActionEvent e) {
-			trocaTela(new TelaListaServicosEfetuados());
+			trocaTela(new TelaStatusVeiculos());
 		}
 	}
 	private class SwingAction_2 extends AbstractAction {
