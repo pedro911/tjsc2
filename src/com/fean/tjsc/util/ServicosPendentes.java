@@ -3,17 +3,19 @@ package com.fean.tjsc.util;
 public class ServicosPendentes {
 	
 	private String placa;
+	private String modeloVeiculo;
 	private int odometro;
 	private int kmProximoServico;
 	private String dataProximoServico;
 	private String servicoFazer;
 	private String situacaoVeiculo;
 	private String situacaoServico;
-	public ServicosPendentes(String placa, int odometro, int kmProximoServico,
-			String dataProximoServico, String servicoFazer,
-			String situacaoVeiculo, String situacaoServico) {
+	public ServicosPendentes(String placa, String modeloVeiculo, int odometro,
+			int kmProximoServico, String dataProximoServico,
+			String servicoFazer, String situacaoVeiculo, String situacaoServico) {
 		super();
 		this.placa = placa;
+		this.modeloVeiculo = modeloVeiculo;
 		this.odometro = odometro;
 		this.kmProximoServico = kmProximoServico;
 		this.dataProximoServico = dataProximoServico;
@@ -29,6 +31,12 @@ public class ServicosPendentes {
 	}
 	public void setPlaca(String placa) {
 		this.placa = placa;
+	}
+	public String getModeloVeiculo() {
+		return modeloVeiculo;
+	}
+	public void setModeloVeiculo(String modeloVeiculo) {
+		this.modeloVeiculo = modeloVeiculo;
 	}
 	public int getOdometro() {
 		return odometro;
@@ -66,8 +74,6 @@ public class ServicosPendentes {
 	public void setSituacaoServico(String situacaoServico) {
 		this.situacaoServico = situacaoServico;
 	}
-	
-	
 	
 
 }

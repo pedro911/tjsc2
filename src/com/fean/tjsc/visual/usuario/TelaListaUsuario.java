@@ -1,6 +1,8 @@
 package com.fean.tjsc.visual.usuario;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -12,7 +14,10 @@ import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.JButton;
 
 
@@ -22,13 +27,25 @@ import com.fean.tjsc.mb.abastecimento.AbastecimentoMB;
 import com.fean.tjsc.mb.usuario.UsuarioMB;
 import com.fean.tjsc.visual.principal.TelaPrincipal;
 
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
+
+
 public class TelaListaUsuario extends JPanel {
 	private static JTable table;
 	private JTextField txtBusca;
+	static List listaUsuarios = new ArrayList();
 
 	/**
 	 * Create the panel.
@@ -133,6 +150,45 @@ public class TelaListaUsuario extends JPanel {
 
 			}
 		});
+		
+		JButton btnImprimirLista = new JButton("Imprimir Lista");
+		btnImprimirLista.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				listaUsuarios.clear();
+				for (int i=0;i<table.getRowCount();i++){
+					Usuario temp = new Usuario();
+					temp.setNome(table.getValueAt(i, 1).toString());
+					temp.setEmail(table.getValueAt(i, 2).toString());
+					temp.setMatricula(table.getValueAt(i, 3).toString());
+					if (table.getValueAt(i, 4).toString() == "Sim"){
+						temp.setAdministrador(true);	
+					}
+					else{
+						temp.setAdministrador(false);
+					}
+					listaUsuarios.add(temp);					
+				}	
+				
+				JasperReport report;
+				
+				try {
+					report = JasperCompileManager.compileReport("relatorios/usuarios.jrxml");					
+					JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaUsuarios));
+					JasperViewer jrviewer = new JasperViewer (print,false);
+					jrviewer.show();					
+					// exportacao do relatorio para outro formato, no caso PDF
+					//JasperExportManager.exportReportToPdfFile(print, "relatorios/Relatorio.pdf");
+					System.out.println("Relatório gerado.");
+					//JOptionPane.showMessageDialog(null,"Relatório gerado.");
+				} catch (JRException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -141,6 +197,8 @@ public class TelaListaUsuario extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnImprimirLista)
+							.addPreferredGap(ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
 							.addComponent(btnRemover)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnInserir)
@@ -174,40 +232,50 @@ public class TelaListaUsuario extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnEditar)
 						.addComponent(btnInserir)
-						.addComponent(btnRemover))
+						.addComponent(btnRemover)
+						.addComponent(btnImprimirLista))
 					.addContainerGap())
 		);
 
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-						"Nome", "E-mail", "Matr\u00EDcula", "Adm", "ID"
-				}
-				) {
+			new Object[][] {
+			},
+			new String[] {
+				"ID", "Nome", "E-mail", "Matr\u00EDcula", "Adm"
+			}
+		) {
 			boolean[] columnEditables = new boolean[] {
-					false, false, false, false, false
+				false, false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
-		table.getColumnModel().getColumn(0).setPreferredWidth(159);
-		table.getColumnModel().getColumn(1).setPreferredWidth(147);
-		table.getColumnModel().getColumn(2).setPreferredWidth(55);
-		table.getColumnModel().getColumn(3).setPreferredWidth(35);
-		table.getColumnModel().getColumn(4).setPreferredWidth(22);
-
+		table.getColumnModel().getColumn(0).setResizable(false);
+		
 		atualizaTabela();
-
+				
 		scrollPane.setViewportView(table);
 		setLayout(groupLayout);
+		
+		TableRowSorter<TableModel> sorter  = new TableRowSorter<TableModel>();	
+		Comparator<String> comparator = new Comparator<String>() {
+			public int compare(String s1, String s2) {
+				String[] strings1 = s1.split("\\s");
+				String[] strings2 = s2.split("\\s");
+				return strings1[strings1.length - 1]
+						.compareTo(strings2[strings2.length - 1]);
+			}
+		};
+		table.setRowSorter(sorter);
+		table.setAutoCreateRowSorter(true);
 
 	}
 
 	public static void atualizaTabela(){
-		((DefaultTableModel)table.getModel()).setRowCount(0);
+		((DefaultTableModel)table.getModel()).setRowCount(0);		
+				
 		UsuarioMB usuarioMB = UsuarioMB.getInstance();
 
 		try {
@@ -221,13 +289,27 @@ public class TelaListaUsuario extends JPanel {
 					adm = "Não";
 				}
 				((DefaultTableModel)table.getModel()).addRow(new String[] {
+						listaUsuarios.get(i).getIdusuario()+"",
 						listaUsuarios.get(i).getNome(),
 						listaUsuarios.get(i).getEmail(),
 						listaUsuarios.get(i).getMatricula(),
-						adm,
-						listaUsuarios.get(i).getIdusuario()+""
+						adm						
 				});
 			}
+			table.getColumnModel().getColumn( 0 ).setMaxWidth( 0 );  
+			table.getColumnModel().getColumn( 0 ).setMinWidth( 0 );  
+			table.getTableHeader().getColumnModel().getColumn( 0 ).setMaxWidth( 0 );  
+			table.getTableHeader().getColumnModel().getColumn( 0 ).setMinWidth( 0 );  
+
+			table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {  
+				public Component getTableCellRendererComponent(JTable table, Object value,  
+						boolean isSelected, boolean hasFocus, int row, int column) {  
+					super.getTableCellRendererComponent(table, value, isSelected,  
+							hasFocus, row, column);  				
+					return this;  
+				}  
+			});
+			
 		} catch (ClassNotFoundException e) {
 			JOptionPane.showMessageDialog(null,"erro - "+e);
 			// TODO Auto-generated catch block
@@ -237,6 +319,8 @@ public class TelaListaUsuario extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 	}
 	public void abrirTelaCadastroUsuario(){
 		TelaPrincipal parent = (TelaPrincipal)getParent().getParent().getParent().getParent();

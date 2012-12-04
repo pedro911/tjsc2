@@ -20,6 +20,7 @@
 	<field name="situacaoVeiculo" class="java.lang.String"/>
 	<field name="situacaoServico" class="java.lang.String"/>
 	<field name="servicoFazer" class="java.lang.String"/>
+	<field name="modeloVeiculo" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -37,14 +38,42 @@
 				</staticText>
 			</frame>
 			<frame>
-				<reportElement uuid="1a925a05-fd83-42e6-b2a6-9c0e019b7b56" mode="Opaque" x="0" y="70" width="802" height="32" forecolor="#000000" backcolor="#999999"/>
+				<reportElement uuid="1a925a05-fd83-42e6-b2a6-9c0e019b7b56" mode="Opaque" x="0" y="70" width="802" height="32" forecolor="#000000" backcolor="#00CCCC"/>
 				<staticText>
-					<reportElement uuid="cbca5b61-e742-413c-856b-29b78b8693d6" style="SubTitle" x="498" y="3" width="299" height="29" forecolor="#FFFFFF" backcolor="#000000"/>
+					<reportElement uuid="cbca5b61-e742-413c-856b-29b78b8693d6" style="SubTitle" x="0" y="3" width="249" height="29" forecolor="#FFFFFF" backcolor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Verdana" size="14" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Serviços Pendentes]]></text>
+					<text><![CDATA[Serviços Pendentes do Veículo]]></text>
 				</staticText>
+				<textField>
+					<reportElement uuid="5b145869-a370-4122-9c77-1b84d82a62d4" x="398" y="8" width="86" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{placa}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="6e673801-306b-4c2d-976d-a87260c598b2" x="567" y="8" width="83" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{odometro}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="255b6fab-656a-4b14-97fe-d6ef9fccb3e8" x="484" y="8" width="83" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Odometro]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="3d316d0f-6a38-4f28-ab58-55a4e7f9a39e" x="272" y="8" width="126" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{modeloVeiculo}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</title>
@@ -53,53 +82,39 @@
 	</pageHeader>
 	<columnHeader>
 		<band height="31" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="6adcaa20-2ce2-49c7-873e-0711f9a146ec" x="2" y="4" width="84" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Veículo]]></text>
-			</staticText>
 			<line>
-				<reportElement uuid="b10cc141-5893-49f8-b22a-0dec0516e5a1" x="2" y="24" width="800" height="2"/>
+				<reportElement uuid="b10cc141-5893-49f8-b22a-0dec0516e5a1" x="2" y="24" width="800" height="1"/>
 			</line>
 			<staticText>
-				<reportElement uuid="255b6fab-656a-4b14-97fe-d6ef9fccb3e8" x="86" y="4" width="83" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Odometro]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="59903c79-6952-409c-8c3f-91f434dd779a" x="169" y="4" width="134" height="20"/>
+				<reportElement uuid="59903c79-6952-409c-8c3f-91f434dd779a" x="2" y="4" width="134" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Km Próximo Serviço]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="85422068-ac5d-4d79-ad44-fbc8206c9917" x="303" y="4" width="139" height="20"/>
+				<reportElement uuid="85422068-ac5d-4d79-ad44-fbc8206c9917" x="136" y="4" width="176" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Data Próximo Serviço]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="3a576dcf-1f56-49f5-a840-e0bf0936ad7f" x="442" y="4" width="136" height="20"/>
+				<reportElement uuid="3a576dcf-1f56-49f5-a840-e0bf0936ad7f" x="312" y="4" width="185" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tipo do Serviço]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="e2e83296-bf03-47bc-8d48-0dc90af3c4c1" x="578" y="4" width="100" height="20"/>
+				<reportElement uuid="e2e83296-bf03-47bc-8d48-0dc90af3c4c1" x="497" y="4" width="138" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Situação Veículo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="25c986d9-18f8-4a0c-8a8a-c377dc8120d4" x="678" y="4" width="119" height="20"/>
+				<reportElement uuid="25c986d9-18f8-4a0c-8a8a-c377dc8120d4" x="635" y="4" width="134" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -110,57 +125,40 @@
 	<detail>
 		<band height="22" splitType="Stretch">
 			<textField>
-				<reportElement uuid="5b145869-a370-4122-9c77-1b84d82a62d4" x="0" y="0" width="86" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{placa}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="6e673801-306b-4c2d-976d-a87260c598b2" x="86" y="0" width="83" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{odometro}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="0396ce0d-4220-4157-858e-58a495605b25" x="169" y="0" width="134" height="20"/>
+				<reportElement uuid="0396ce0d-4220-4157-858e-58a495605b25" x="2" y="0" width="134" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{kmProximoServico}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="9cf5e620-2ee8-44eb-8eab-b0d310252aef" x="303" y="0" width="139" height="20"/>
+				<reportElement uuid="9cf5e620-2ee8-44eb-8eab-b0d310252aef" x="136" y="0" width="176" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dataProximoServico}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="390ca51e-1aa2-4870-8cdc-4d25d0f594bf" x="578" y="0" width="100" height="20"/>
+				<reportElement uuid="390ca51e-1aa2-4870-8cdc-4d25d0f594bf" x="497" y="0" width="138" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{situacaoVeiculo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="1b2fd41c-48f3-431f-8451-3f8edb88b13d" x="678" y="0" width="119" height="20"/>
+				<reportElement uuid="1b2fd41c-48f3-431f-8451-3f8edb88b13d" x="635" y="0" width="134" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{situacaoServico}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="a431f32d-a8d4-4675-a6c6-856a8a39131e" x="442" y="0" width="136" height="20"/>
+				<reportElement uuid="a431f32d-a8d4-4675-a6c6-856a8a39131e" x="312" y="0" width="185" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{servicoFazer}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement uuid="b10cc141-5893-49f8-b22a-0dec0516e5a1" x="2" y="20" width="800" height="1"/>
-			</line>
 		</band>
 	</detail>
 	<columnFooter>
@@ -169,7 +167,7 @@
 	<pageFooter>
 		<band height="28" splitType="Stretch">
 			<frame>
-				<reportElement uuid="1e28149b-ec02-4e15-bbda-c7ae64163d6b" mode="Opaque" x="0" y="0" width="802" height="25" forecolor="#D0B48E" backcolor="#009999"/>
+				<reportElement uuid="1e28149b-ec02-4e15-bbda-c7ae64163d6b" mode="Opaque" x="0" y="0" width="802" height="25" forecolor="#D0B48E" backcolor="#999999"/>
 				<textField evaluationTime="Report">
 					<reportElement uuid="790aecc3-951f-4d5b-b605-01a04a0b3dd9" style="Column header" x="757" y="3" width="40" height="20" forecolor="#FFFFFF"/>
 					<textElement verticalAlignment="Middle">
@@ -185,7 +183,7 @@
 					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 				</textField>
 				<textField pattern="EEEEE dd MMMMM yyyy">
-					<reportElement uuid="09cc8712-575b-4f21-8b53-1fbdd36b04fe" style="Column header" x="2" y="3" width="197" height="20" forecolor="#FFFFFF"/>
+					<reportElement uuid="09cc8712-575b-4f21-8b53-1fbdd36b04fe" style="Column header" x="2" y="3" width="236" height="20" forecolor="#FFFFFF"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>

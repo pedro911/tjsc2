@@ -172,9 +172,8 @@ public class TipoServicoModeloMB {
 				tsmTemp.setDataProximoServico(dataCadastro.getTime());
 				tsmTemp.setSituacao(retorno);
 				tsmResultado.add(i, tsmTemp);			
-			}				
+			}								
 		}
-
 		return tsmResultado;
 	}
 

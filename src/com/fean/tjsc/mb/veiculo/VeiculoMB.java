@@ -185,11 +185,9 @@ public class VeiculoMB {
 		
 		List<Veiculo> veiculo = finbByAll();
 		List<TipoServicoModelo> tiposServicosModeloVeiculo = null;
-		//List<TipoServicoModelo> tiposServicosModeloResultado = null;
 		String retorno = "";
 		TipoServicoModeloDAO tiposervicomodeloDAO = TipoServicoModeloDAO.getInstance();
 		ServicoDAO servicoDAO = ServicoDAO.getInstance();
-		//TipoServicoVeiculoDAO tipoServicoVeiculoDAO = TipoServicoVeiculoDAO.getInstance();
 		Calendar hoje = Calendar.getInstance();
 
 		for (int i1=0;i1<veiculo.size();i1++){
@@ -220,7 +218,7 @@ public class VeiculoMB {
 								retorno = "vermelho";
 							}						
 							else{
-								retorno = "amarelo";
+								retorno = "amarelo4";
 							}
 						}
 						else{
@@ -235,11 +233,11 @@ public class VeiculoMB {
 
 					Calendar dataCadastroPercent = Calendar.getInstance();  
 					dataCadastroPercent.setTime(veiculo.get(i1).getDataCadastro());
-					dataCadastroPercent.add(Calendar.MONTH, ((tiposServicosModeloVeiculo.get(i).getTempo()-1)));  // adicionar 5 meses  
+					dataCadastroPercent.add(Calendar.MONTH, ((tiposServicosModeloVeiculo.get(i).getTempo()-1)));  // adicionar n-1 meses  
 
 					Calendar dataCadastro = Calendar.getInstance();   
 					dataCadastro.setTime(veiculo.get(i1).getDataCadastro());
-					dataCadastro.add(Calendar.MONTH, (tiposServicosModeloVeiculo.get(i).getTempo()));  // adicionar 6 meses
+					dataCadastro.add(Calendar.MONTH, (tiposServicosModeloVeiculo.get(i).getTempo()));  // adicionar n meses
 
 					if ( (veiculo.get(i1).getOdometro() > (veiculo.get(i1).getKmCadastro() + (tiposServicosModeloVeiculo.get(i).getKm()*0.8)))  
 							|| ( hoje.after(dataCadastroPercent) ) ) {					
@@ -260,10 +258,12 @@ public class VeiculoMB {
 					else{
 						retorno = "verde";
 					}
-				}				
+				}
+				
+							
 			}
 			veiculo.get(i1).setSituacao(retorno);
-			editar(veiculo.get(i1));			
+			editar(veiculo.get(i1));								
 		}
 		return veiculo;
 	}

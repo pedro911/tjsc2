@@ -54,6 +54,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -102,13 +103,16 @@ public class TelaStatusVeiculos extends JPanel {
 				}	
 				
 				JasperReport report;
+				
 				try {
-					report = JasperCompileManager.compileReport("relatorios/servicosPendentes2.jrxml");
+					report = JasperCompileManager.compileReport("relatorios/servicosPendentes.jrxml");					
 					JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaServicos));
+					JasperViewer jrviewer = new JasperViewer (print,false);
+					jrviewer.show();					
 					// exportacao do relatorio para outro formato, no caso PDF
-					JasperExportManager.exportReportToPdfFile(print, "relatorios/Relatorio.pdf");
+					//JasperExportManager.exportReportToPdfFile(print, "relatorios/Relatorio.pdf");
 					System.out.println("Relatório gerado.");
-					JOptionPane.showMessageDialog(null,"Relatório gerado.");
+					//JOptionPane.showMessageDialog(null,"Relatório gerado.");
 				} catch (JRException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

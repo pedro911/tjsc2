@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -39,6 +40,7 @@ import com.fean.tjsc.mb.tiposervico.TipoServicoMB;
 import com.fean.tjsc.mb.tiposervico.TipoServicoModeloMB;
 import com.fean.tjsc.mb.veiculo.VeiculoMB;
 import com.fean.tjsc.visual.principal.TelaPrincipal;
+import com.fean.tjsc.util.ServicosPendentes;
 
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
@@ -48,6 +50,15 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
 import java.awt.Font;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
+
 public class TelaListaServicosPorVeiculo extends JPanel {
 	private static JTable table;
 	private final Action action = new SwingAction();
@@ -55,6 +66,7 @@ public class TelaListaServicosPorVeiculo extends JPanel {
 	private JTextField txtOdometro;
 	private JTextField txtSituacao;
 	public static Veiculo veiculo = new Veiculo();
+	static List listaServicos = new ArrayList();
 
 	/**
 	 * Create the panel.
@@ -68,6 +80,41 @@ public class TelaListaServicosPorVeiculo extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 
 		JButton btnInserir = new JButton("Imprimir Relat\u00F3rio");
+		btnInserir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				listaServicos.clear();
+				for (int i=0;i<table.getRowCount();i++){
+					ServicosPendentes servicosPendentes = new ServicosPendentes();
+					servicosPendentes.setModeloVeiculo(veiculo.getModelo().getNome());
+					servicosPendentes.setPlaca(txtPlaca.getText());
+					servicosPendentes.setOdometro(Integer.parseInt(txtOdometro.getText()));
+					servicosPendentes.setKmProximoServico(Integer.parseInt(table.getValueAt(i, 2).toString()));
+					servicosPendentes.setDataProximoServico(table.getValueAt(i, 3).toString());
+					servicosPendentes.setServicoFazer(table.getValueAt(i, 1).toString());
+					servicosPendentes.setSituacaoVeiculo(txtSituacao.getText());
+					servicosPendentes.setSituacaoServico(table.getValueAt(i, 4).toString());
+					listaServicos.add(servicosPendentes);					
+				}	
+				
+				JasperReport report;
+				
+				try {
+					report = JasperCompileManager.compileReport("relatorios/servicosPendentesPorVeiculo.jrxml");					
+					JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaServicos));
+					JasperViewer jrviewer = new JasperViewer (print,false);
+					jrviewer.show();					
+					// exportacao do relatorio para outro formato, no caso PDF
+					//JasperExportManager.exportReportToPdfFile(print, "relatorios/Relatorio.pdf");
+					System.out.println("Relatório gerado.");
+					//JOptionPane.showMessageDialog(null,"Relatório gerado.");
+				} catch (JRException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		});
 		
 		JLabel lblVeculo = new JLabel("Ve\u00EDculo:");
 		
@@ -159,34 +206,10 @@ public class TelaListaServicosPorVeiculo extends JPanel {
 		table.getColumnModel().getColumn(0).setMinWidth(0);
 		table.getColumnModel().getColumn(0).setMaxWidth(15);
 
-		atualizaTabela();
-
-		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {  
-			public Component getTableCellRendererComponent(JTable table, Object value,  
-					boolean isSelected, boolean hasFocus, int row, int column) {  
-				super.getTableCellRendererComponent(table, value, isSelected,  
-						hasFocus, row, column);  
-				/* para definir cores para a linha da tabela de acordo com a situacao do servico
-				if (status =="vermelho") {  
-					setBackground(Color.RED);
-					setForeground(Color.WHITE);
-				} 
-				else if (status =="amarelo") {  
-					setBackground(Color.YELLOW);
-					setForeground(Color.BLACK);
-				} 
-				else {  
-					setBackground(null);
-					setForeground(null);
-				}
-				 */
-				return this;  
-			}  
-		});		
+		atualizaTabela();	
 
 		scrollPane.setViewportView(table);
 		setLayout(groupLayout);
-		//tentar organizar a tabela: vermelhos primeiro, amarelos em baixo, verde nem aparece...
 		TableRowSorter<TableModel> sorter  = new TableRowSorter<TableModel>();	
 		Comparator<String> comparator = new Comparator<String>() {
 			public int compare(String s1, String s2) {
@@ -205,18 +228,7 @@ public class TelaListaServicosPorVeiculo extends JPanel {
 		VeiculoMB veiculoMB = VeiculoMB.getInstance();
 		ServicoMB servicoMB = ServicoMB.getInstance();
 		TipoServicoModeloMB tipoServicoModeloMB = TipoServicoModeloMB.getInstance();
-		
-		//Servico s1 = new Servico();
-		/* Ordem para por na tabela:
-		 * id veiculo
-		 * placa
-		 * odometro veiculo
-		 * serviço a fazer
-		 * km próximo servico (a fazer)
-		 * data próximo serviço (a fazer)
-		 * situação (verde, amarelo, vemelho)
-		 */
-
+			
 		List<TipoServicoModelo> tiposServicosModeloVeiculo = (List<TipoServicoModelo>) tipoServicoModeloMB.findTipoServicoByModelo(veiculo);	
 		
 		for (int i=0;i<tiposServicosModeloVeiculo.size();i++){
@@ -238,21 +250,7 @@ public class TelaListaServicosPorVeiculo extends JPanel {
 			public Component getTableCellRendererComponent(JTable table, Object value,  
 					boolean isSelected, boolean hasFocus, int row, int column) {  
 				super.getTableCellRendererComponent(table, value, isSelected,  
-						hasFocus, row, column);  
-				/* para definir cores para a linha da tabela de acordo com a situacao do servico
-					if (veiculoTestado.getSituacao() =="vermelho") {  
-						setBackground(Color.RED);
-						setForeground(Color.WHITE);
-					} 
-					else if (veiculoTestado.getSituacao() =="amarelo") {  
-						setBackground(Color.YELLOW);
-						setForeground(Color.BLACK);
-					} 
-					else {  
-						setBackground(null);
-						setForeground(null);
-					}
-				 */
+						hasFocus, row, column);  				
 				return this;  
 			}  
 		});

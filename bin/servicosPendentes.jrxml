@@ -1,168 +1,200 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="servicosPendentes" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cd3cf25b-7f25-4621-a9ed-95aaf402f47a">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="servicosPendentes2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fc72ef58-5c6f-4d5b-b5d7-0b15071ed5da">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
 	<field name="placa" class="java.lang.String"/>
-	<field name="odometro" class="java.lang.Integer"/>
+	<field name="odometro" class="java.lang.String"/>
+	<field name="kmProximoServico" class="java.lang.String"/>
+	<field name="dataProximoServico" class="java.lang.String"/>
 	<field name="situacaoVeiculo" class="java.lang.String"/>
 	<field name="situacaoServico" class="java.lang.String"/>
-	<field name="kmProximoServico" class="java.lang.Integer"/>
-	<field name="dataProximoServico" class="java.lang.String"/>
-	<field name="TipoServico" class="java.lang.String"/>
-	<group name="Group1">
-		<groupHeader>
-			<band height="27">
-				<staticText>
-					<reportElement uuid="d65570e7-44bf-44d0-8dcf-4fcc9a6b5f06" mode="Opaque" x="0" y="1" width="68" height="22" forecolor="#000000" backcolor="#FFFFFF"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Veículo]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="63c519bb-d79e-4cd8-9cd8-4647401a210a" x="68" y="0" width="83" height="24"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Odometro]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="d66666f8-c780-4b8f-ac99-2a4f42f6c107" x="286" y="0" width="134" height="23"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Data Próximo Serviço]]></text>
-				</staticText>
-				<line>
-					<reportElement uuid="7e66ede8-d949-4b8e-8f04-d72ca5df2d02" positionType="FixRelativeToBottom" x="0" y="23" width="802" height="1"/>
-				</line>
-				<staticText>
-					<reportElement uuid="1c978506-6528-438d-90b9-157cac37e8da" x="151" y="0" width="135" height="23"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Km Próximo Serviço]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="97bc5566-ae15-4a6a-b112-88328154e560" x="420" y="1" width="100" height="23"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Tipo Serviço]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="37f47da8-e611-4276-852c-13cc96b89cd6" x="520" y="1" width="111" height="24"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Situação Veículo]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="3239eda5-ecdb-4276-a2ef-9b1691c1ab07" x="631" y="1" width="111" height="22"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Situação Serviço]]></text>
-				</staticText>
-			</band>
-		</groupHeader>
-		<groupFooter>
-			<band/>
-		</groupFooter>
-	</group>
+	<field name="servicoFazer" class="java.lang.String"/>
 	<background>
-		<band/>
+		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="72">
+		<band height="102" splitType="Stretch">
 			<frame>
-				<reportElement uuid="6f55c68b-264b-4a68-baa6-f6a7ad57a993" mode="Opaque" x="-20" y="-20" width="842" height="92" backcolor="#006699"/>
-				<textField>
-					<reportElement uuid="ab422694-c8e8-4f47-a472-900607793e52" x="20" y="10" width="601" height="72" forecolor="#FFFFFF"/>
-					<textElement verticalAlignment="Middle" markup="none">
-						<font size="24" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[TJSC - Controle de Serviços - Frota de veículos]]></textFieldExpression>
-				</textField>
+				<reportElement uuid="c98a2ca5-ad3a-4ea6-b21d-2ad5980b979d" mode="Opaque" x="0" y="0" width="802" height="66" backcolor="#009999"/>
 				<staticText>
-					<reportElement uuid="41a7491c-1e0c-4f8c-bb10-63338904b77b" x="631" y="62" width="180" height="20" forecolor="#FFFFFF"/>
-					<textElement textAlignment="Right">
-						<font size="12" isBold="true"/>
+					<reportElement uuid="18801d88-8536-4987-9c2b-ff7166985417" style="Title" x="0" y="0" width="797" height="66" forecolor="#FFFFFF"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Verdana" size="30" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Serviço Pendentes por Veículo]]></text>
+					<text><![CDATA[TJSC - Controle Serviços Frota de Veículos]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement uuid="1a925a05-fd83-42e6-b2a6-9c0e019b7b56" mode="Opaque" x="0" y="70" width="802" height="32" forecolor="#000000" backcolor="#999999"/>
+				<staticText>
+					<reportElement uuid="cbca5b61-e742-413c-856b-29b78b8693d6" style="SubTitle" x="498" y="3" width="299" height="29" forecolor="#FFFFFF" backcolor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Serviços Pendentes por Veículo]]></text>
 				</staticText>
 			</frame>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="15"/>
+		<band splitType="Stretch"/>
 	</pageHeader>
-	<detail>
-		<band height="32">
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6adcaa20-2ce2-49c7-873e-0711f9a146ec" x="2" y="4" width="84" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Veículo]]></text>
+			</staticText>
 			<line>
-				<reportElement uuid="7e66ede8-d949-4b8e-8f04-d72ca5df2d02" positionType="FixRelativeToBottom" x="0" y="27" width="802" height="1"/>
+				<reportElement uuid="b10cc141-5893-49f8-b22a-0dec0516e5a1" x="2" y="24" width="800" height="2"/>
 			</line>
+			<staticText>
+				<reportElement uuid="255b6fab-656a-4b14-97fe-d6ef9fccb3e8" x="86" y="4" width="83" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Odometro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="59903c79-6952-409c-8c3f-91f434dd779a" x="169" y="4" width="134" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Km Próximo Serviço]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="85422068-ac5d-4d79-ad44-fbc8206c9917" x="303" y="4" width="139" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Próximo Serviço]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3a576dcf-1f56-49f5-a840-e0bf0936ad7f" x="442" y="4" width="136" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo do Serviço]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e2e83296-bf03-47bc-8d48-0dc90af3c4c1" x="578" y="4" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Situação Veículo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="25c986d9-18f8-4a0c-8a8a-c377dc8120d4" x="678" y="4" width="119" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Situação Serviço]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
 			<textField>
-				<reportElement uuid="0480f05a-e24b-4bed-9926-3160fed3b5d8" x="0" y="6" width="68" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<reportElement uuid="5b145869-a370-4122-9c77-1b84d82a62d4" x="0" y="0" width="86" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{placa}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="75293f1d-fc08-4468-8ced-e0e94045ca80" x="68" y="6" width="83" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<reportElement uuid="6e673801-306b-4c2d-976d-a87260c598b2" x="86" y="0" width="83" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{odometro}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="b1a8652d-8c2a-4d1c-a2b3-89e67547ac27" x="286" y="6" width="134" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<reportElement uuid="0396ce0d-4220-4157-858e-58a495605b25" x="169" y="0" width="134" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kmProximoServico}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9cf5e620-2ee8-44eb-8eab-b0d310252aef" x="303" y="0" width="139" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{dataProximoServico}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="d1e178dc-8462-414c-9872-9fa4d205e57a" x="420" y="6" width="100" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{TipoServico}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="bfc23a25-8cc3-4a0e-9a6c-59912c293c0d" x="520" y="6" width="111" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<reportElement uuid="390ca51e-1aa2-4870-8cdc-4d25d0f594bf" x="578" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{situacaoVeiculo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="45c888df-523a-40a4-add1-e28de524fec4" x="631" y="6" width="111" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<reportElement uuid="1b2fd41c-48f3-431f-8451-3f8edb88b13d" x="678" y="0" width="119" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{situacaoServico}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="b7c71b7e-5b0d-4d17-8eee-6469831748c5" x="151" y="6" width="135" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{kmProximoServico}]]></textFieldExpression>
+				<reportElement uuid="a431f32d-a8d4-4675-a6c6-856a8a39131e" x="442" y="0" width="136" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{servicoFazer}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement uuid="b10cc141-5893-49f8-b22a-0dec0516e5a1" x="2" y="20" width="800" height="1"/>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>
-		<band/>
+		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="41">
-			<textField>
-				<reportElement uuid="9816b3f0-0c95-4174-9d83-4e6afb9a71db" mode="Opaque" x="0" y="28" width="762" height="13" backcolor="#E6E6E6"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement uuid="bbf55e3f-4446-4f16-96cd-3426202e11ac" mode="Opaque" x="762" y="28" width="40" height="13" backcolor="#E6E6E6"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement uuid="01f589d5-dea4-49ef-8b96-08c195156b74" x="0" y="28" width="100" height="13"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
+		<band height="28" splitType="Stretch">
+			<frame>
+				<reportElement uuid="1e28149b-ec02-4e15-bbda-c7ae64163d6b" mode="Opaque" x="0" y="0" width="802" height="25" forecolor="#D0B48E" backcolor="#009999"/>
+				<textField evaluationTime="Report">
+					<reportElement uuid="790aecc3-951f-4d5b-b605-01a04a0b3dd9" style="Column header" x="757" y="3" width="40" height="20" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="ec8ce7f3-de79-4767-a09a-0999980fb00b" style="Column header" x="677" y="3" width="80" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement uuid="09cc8712-575b-4f21-8b53-1fbdd36b04fe" style="Column header" x="2" y="3" width="197" height="20" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
 		</band>
 	</pageFooter>
 	<summary>
-		<band/>
+		<band splitType="Stretch"/>
 	</summary>
 </jasperReport>

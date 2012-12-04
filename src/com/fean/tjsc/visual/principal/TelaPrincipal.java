@@ -48,6 +48,8 @@ public class TelaPrincipal extends JFrame {
 	private final Action action_4 = new SwingAction_4();
 	private final Action action_5 = new SwingAction_5();
 	private final Action action_6 = new SwingAction_6();
+	private final Action action_7 = new SwingAction_7();
+	private final Action action_8 = new SwingAction_9();
 	
 	/**
 	 * Launch the application.
@@ -98,20 +100,9 @@ public class TelaPrincipal extends JFrame {
 		JMenu mnRelatrios = new JMenu("Relat\u00F3rios");
 		menuBar.add(mnRelatrios);
 		
-		JMenu mnServios_1 = new JMenu("Servi\u00E7os");
+		JMenuItem mnServios_1 = new JMenuItem("Servi\u00E7os Pendentes");
+		mnServios_1.setAction(action_7);
 		mnRelatrios.add(mnServios_1);
-		
-		JMenuItem mntmPendentes_1 = new JMenuItem("Pendentes");
-		mnServios_1.add(mntmPendentes_1);
-		
-		JMenuItem mntmEfetuados = new JMenuItem("Efetuados");
-		mnServios_1.add(mntmEfetuados);
-		
-		JMenuItem mntmPorVeculo_2 = new JMenuItem("Por Ve\u00EDculo");
-		mnServios_1.add(mntmPorVeculo_2);
-		
-		JMenuItem mntmNumPerodo = new JMenuItem("Num Per\u00EDodo");
-		mnServios_1.add(mntmNumPerodo);
 		
 		JMenuItem mntmVeculos = new JMenuItem("Ve\u00EDculos");
 		mnRelatrios.add(mntmVeculos);
@@ -126,6 +117,7 @@ public class TelaPrincipal extends JFrame {
 		mnRelatrios.add(mntmUnidades);
 		
 		JMenuItem mntmUsurios = new JMenuItem("Usu\u00E1rios");
+		mntmUsurios.setAction(action_8);
 		mnRelatrios.add(mntmUsurios);
 		
 		JMenu mnServios = new JMenu("Servi\u00E7os");
@@ -375,4 +367,28 @@ public class TelaPrincipal extends JFrame {
 		}
 	}		
 	
+	private class SwingAction_7 extends AbstractAction {
+		public SwingAction_7() {
+			putValue(NAME, "Serviços Pendentes");
+			putValue(SHORT_DESCRIPTION, "Lista os serviços pendentes");
+		}
+		public void actionPerformed(ActionEvent e) {
+			trocaTela(new TelaStatusVeiculos());
+		}
+	}
+	
+	private class SwingAction_9 extends AbstractAction {
+		public SwingAction_9() {
+			putValue(NAME, "Usuários");
+			putValue(SHORT_DESCRIPTION, "Listar usuarios");
+		}
+		public void actionPerformed(ActionEvent e) {
+			if(user.getAdministrador() == true){
+				trocaTela(new TelaListaUsuario());
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Você não tem permissão para acessar este menu");
+			}
+		}
+	}
 }
